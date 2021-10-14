@@ -105,5 +105,5 @@
         android:src="@drawable/ic_down"
         android:layout_margin="10dp"
         android:alpha="0.4"/>
-    
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
