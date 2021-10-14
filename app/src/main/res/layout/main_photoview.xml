@@ -24,7 +24,7 @@
             android:id="@+id/photo_toolbar"
             android:background="@color/bar"
             android:minHeight="@dimen/top_size"
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/AppTheme"
             app:contentInsetStart="0dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
@@ -52,7 +52,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="5dp"
 
-                    android:buttonTint="#F4081"
+                    android:buttonTint="#FF4081"
                     android:scaleX="0.9"
                     android:scaleY="0.9"
                     android:visibility="gone"
@@ -102,6 +102,14 @@
         android:layout_height="40dp"
         android:id="@+id/up_button"
         android:layout_gravity="start|bottom"
+        android:src="@drawable/ic_down"
+        android:layout_margin="10dp"
+        android:alpha="0.4"/>
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/down_button"
+        android:layout_gravity="end|bottom"
         android:src="@drawable/ic_down"
         android:layout_margin="10dp"
         android:alpha="0.4"/>

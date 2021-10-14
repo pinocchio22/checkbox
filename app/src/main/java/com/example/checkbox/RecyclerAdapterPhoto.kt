@@ -21,6 +21,7 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
     private var padding_size = 200
     private var size : Int = 200
     private var ck = 0
+    private var ck2 = 0
 
     inner class Holder(itemView : View?) : RecyclerView.ViewHolder(itemView!!) {
         var thumbnail : ImageView = itemView!!.findViewById(R.id.thumbnail)
@@ -56,10 +57,6 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
         }
     }
 
-    fun updateCheckbox(n : Int) {
-        ck = n
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         view = LayoutInflater.from(context).inflate(R.layout.thumbnail_imgview, parent, false)
         return Holder(view)
@@ -81,9 +78,25 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
         MainHandler.post{ notifyDataSetChanged() }
     }
 
+    fun getThumbnailList() : ArrayList<thumbnailData> {
+        return list
+    }
+
     fun addThumbnailList(data : thumbnailData) {
         list.add(data)
         checkboxList.add(checkboxData(data.photo_id, false))
+    }
+
+    fun getSize() : Int {
+        return list.size
+    }
+
+    fun updateCheckbox(n: Int) {
+        ck = n
+    }
+
+    fun updateCheckbox2(n: Int) {
+        ck2 = n
     }
 }
 

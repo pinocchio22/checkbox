@@ -31,10 +31,10 @@ class MainPhotoView : AppCompatActivity() {
         setContentView(R.layout.thumbnail_similarview)
 
         recyclerView = findViewById(R.id.photo_recyclerView)
-        recyclerAdapter = RecyclerAdapterPhoto(this, lst)
+        recyclerAdapter = RecyclerAdapterPhoto(this, list)
         recyclerView.adapter = recyclerAdapter
         list = recyclerAdapter.getThumbnailList()
-        val lm = GridLayoutManager(Main_PhotoView(), photo_type)
+        val lm = GridLayoutManager(MainPhotoView(), 2)
         recyclerView.layoutManager = lm
 
         photolist_delete.setOnClickListener{
