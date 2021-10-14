@@ -12,14 +12,15 @@
         android:layout_height="100dp"
         android:id="@+id/thumbnail"
         android:scaleType="centerCrop"
-        android:background="@color/black"/>
+        android:background="@color/bar"/>
     <CheckBox
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="3dp"
         android:id="@+id/checkbox"
         android:button="@android:color/transparent"
-        android:background="@drawable/ic_launcher_background"
-        android:checked="false"/>
+        android:background="@drawable/checkbox"
+        android:checked="false"
+        android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -20,10 +20,10 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="@diem/top_size"
+            android:layout_height="@dimen/top_size"
             android:id="@+id/photo_toolbar"
             android:background="@color/bar"
-            android:minHeight="@diem/top_size"
+            android:minHeight="@dimen/top_size"
             android:theme="@style/Theme.AppCompat"
             app:contentInsetStart="0dp"
             app:layout_scrollFlags="scroll|enterAlways">
@@ -32,8 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <ImageView
-                    android:layout_width="@diem/top_size"
-                    android:layout_height="@diem/top_size"
+                    android:layout_width="@dimen/top_size"
+                    android:layout_height="@dimen/top_size"
                     android:id="@+id/title_type"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="5dp"

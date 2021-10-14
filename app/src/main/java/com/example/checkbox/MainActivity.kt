@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.thumbnail_similarview)
 
         recyclerView = findViewById(R.id.photo_recyclerView)
         recyclerAdapter = RecyclerAdapterPhoto(this, lst)

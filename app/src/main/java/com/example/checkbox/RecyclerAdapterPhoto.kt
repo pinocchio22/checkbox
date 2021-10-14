@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnailData>) : RecyclerView.Adapter<RecyclerAdapterPhoto.Holder>
 {
     private lateinit var view : View
+    private var padding_size = 200
+    private var size : Int = 200
+    private var ck = 0
 
     inner class Holder(itemView : View?) : RecyclerView.ViewHolder(itemView!!) {
         var thumbnail : ImageView = itemView!!.findViewById(R.id.thumbnail)
-        var checkBox : CheckBox = itemView!!.findViewById(R.id.checkbox)
+        var checkbox : CheckBox = itemView!!.findViewById(R.id.checkbox)
 
         fun bind(data : thumbnailData, num : Int) {
             val layoutParam = thumbnail.layoutParams as ViewGroup.MarginLayoutParams
@@ -28,9 +31,19 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
             thumbnail.layoutParams.height = size
             layoutParam.setMargins(padding_size, padding_size, padding_size, padding_size)
 
+            if (ck == 1) {
+                checkbox.visibility = View.VISIBLE
+            }
+            else
+                checkbox.visibility = View.GONE
+
             thumbnail.setImageResource(0)
             // 이미지를 생성하여 삽입하는 작업 필요함
         }
+    }
+
+    fun updateCheckbox(n : Int) {
+        ck = n
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
