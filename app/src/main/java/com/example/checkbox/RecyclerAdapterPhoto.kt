@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checkbox.MainPhotoView.Companion.checkboxList
 
 /**
  * @author CHOI
@@ -37,7 +38,20 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
             else
                 checkbox.visibility = View.GONE
 
+            if (num >= checkboxList.size)
+                checkboxList.add(num, checkboxData(data.photo_id, false))
+
             thumbnail.setImageResource(0)
+
+            checkbox.isChecked = checkboxList[num].checked
+            checkbox.setOnClickListener { 
+                if (checkbox.isChecked) {
+                    checkboxList[num].checked = true
+                }
+                else {
+                    checkboxList[num].checked = false
+                }
+            }
             // 이미지를 생성하여 삽입하는 작업 필요함
         }
     }
