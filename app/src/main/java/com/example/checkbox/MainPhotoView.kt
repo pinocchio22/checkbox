@@ -17,6 +17,7 @@ class MainPhotoView : AppCompatActivity() {
 
     private lateinit var recyclerAdapter: RecyclerAdapterPhoto
     private lateinit var recyclerView : RecyclerView
+    var radiobtck: Boolean = false
 
     companion object {
         var list = arrayListOf<thumbnailData>()
@@ -59,6 +60,18 @@ class MainPhotoView : AppCompatActivity() {
             photolist_deleteok.visibility = View.GONE
             photolist_deletecancel.visibility = View.GONE
             radio.visibility = View.GONE
+        }
+    }
+
+    private fun btck2() {
+        if(radiobtck == true) {
+            recyclerAdapter.setCheckAll(false)
+            radio.isChecked = false
+            radiobtck = false
+        }
+        else {
+            recyclerAdapter.setCheckAll(true)
+            radiobtck = true
         }
     }
 }

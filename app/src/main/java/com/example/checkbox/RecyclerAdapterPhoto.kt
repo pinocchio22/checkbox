@@ -15,7 +15,7 @@ import com.example.checkbox.MainPhotoView.Companion.checkboxList
  * @created 2021-10-14
  * @desc
  */
-class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnailData>) : RecyclerView.Adapter<RecyclerAdapterPhoto.Holder>
+class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnailData>) : RecyclerView.Adapter<RecyclerAdapterPhoto.Holder>()
 {
     private lateinit var view : View
     private var padding_size = 200
@@ -44,7 +44,7 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
             thumbnail.setImageResource(0)
 
             checkbox.isChecked = checkboxList[num].checked
-            checkbox.setOnClickListener { 
+            checkbox.setOnClickListener {
                 if (checkbox.isChecked) {
                     checkboxList[num].checked = true
                 }
@@ -71,6 +71,19 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(list[position], position)
+    }
+
+    fun setCheckAll(boolean: Boolean) {
+        for (ckbox in checkboxList) {
+            if (ckbox.checked == !boolean)
+                ckbox.checked = boolean
+        }
+        MainHandler.post{ notifyDataSetChanged() }
+    }
+
+    fun addThumbnailList(data : thumbnailData) {
+        list.add(data)
+        checkboxList.add(checkboxData(data.photo_id, false))
     }
 }
 
