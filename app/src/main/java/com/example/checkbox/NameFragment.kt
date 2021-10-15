@@ -51,10 +51,10 @@ class NameFragment(val v: AppBarLayout) : Fragment() {
     override fun onResume() {
         super.onResume()
         setPhotoSize(this.view!!, folder_type, 10)
-        DirectoryThread.execute{
-            val list = vm.getNameDir(this.context!!)
-            MainHandler.post { recyclerAdapter.setThumbnailList(list) }
-        }
+//        DirectoryThread.execute{
+//            val list = vm.getNameDir(this.context!!)
+//            MainHandler.post { recyclerAdapter.setThumbnailList(list) }
+//        }
         this.context!!.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer)
     }
 

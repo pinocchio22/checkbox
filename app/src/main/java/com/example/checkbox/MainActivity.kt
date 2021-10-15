@@ -4,18 +4,22 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_activity.*
 import java.util.concurrent.LinkedBlockingQueue
@@ -29,6 +33,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private var backPressedTime: Long = 0
     private var init : Boolean = false
     private lateinit var vm : PhotoViewModel
+    private lateinit var observer: ChangeObserver
 
     companion object{
         var folder_type = 3
@@ -41,7 +46,25 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bnv.setOnNavigationItemSelectedListener(this)
         exitView = layoutInflater.inflate(R.layout.exit_layout, null)
 
+        SetHeader()
         init()
+
+        vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
+
+        observer = ChangeObserver(Handler(), this)
+        this.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer)
+
+        val go_search = findViewById<ImageView>(R.id.main_search_button)
+        go_search.setOnClickListener {
+            val intent = Intent(this, SearchView::class.java)
+            startActivity(intent)
+        }
+
+        val go_carmera = findViewById<ImageView>(R.id.main_camera_button)
+        go_carmera.setOnClickListener {
+//            captureCamera()
+            Toast.makeText(this, "카메라 캡쳐", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun CheckAppFirstExecute():Boolean {
@@ -55,6 +78,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
         return !isFirst
     }
+
+    private fun SetHeader() {
+        val toolbar = findViewById<Toolbar>(R.id.main_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = null
+    }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 //        val fm = supportFragmentManager

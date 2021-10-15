@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".MainPhotoView">
         </activity>
+        <activity android:name=".SearchView">
+        </activity>
     </application>
 
 </manifest>
