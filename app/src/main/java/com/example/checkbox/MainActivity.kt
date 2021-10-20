@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -144,7 +145,20 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
         super.onBackPressed()
         val bnv = findViewById<View>(R.id.bottomNavigationView) as BottomNavigationView
-//        updateBottomMenu(bnv)
+        updateBottomMenu(bnv)
+    }
+
+    private fun updateBottomMenu(navigation: BottomNavigationView) {
+        val tag1: Fragment? = supportFragmentManager.findFragmentByTag("name")
+        val tag2: Fragment? = supportFragmentManager.findFragmentByTag("tag")
+        val tag3: Fragment? = supportFragmentManager.findFragmentByTag("cal")
+        val tag4: Fragment? = supportFragmentManager.findFragmentByTag("location")
+
+        if (tag1 != null && tag1.isVisible) {navigation.menu.findItem(R.id.menu_name).isChecked =true}
+        if (tag2 != null && tag2.isVisible) {navigation.menu.findItem(R.id.menu_tag).isChecked =true}
+        if (tag3 != null && tag3.isVisible) {navigation.menu.findItem(R.id.menu_cal).isChecked =true}
+        if (tag4 != null && tag4.isVisible) {navigation.menu.findItem(R.id.menu_location).isChecked =true}
+
     }
 
     fun init(): Boolean{
