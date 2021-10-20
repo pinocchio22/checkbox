@@ -8,14 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_cal.*
 import kotlinx.android.synthetic.main.fragment_cal.view.*
 import kotlinx.android.synthetic.main.main_activity.view.*
+import java.time.YearMonth
 import java.util.*
 
 /**
@@ -34,6 +37,7 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
 
     companion object {
         var CalendarCK : Boolean = false
+        var calDate : Calendar = Calendar.getInstance()
 
     }
 
@@ -82,6 +86,37 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
     fun setView(view : View?) {
         gridView = view!!.findViewById(R.id.cal_grid)
     }
+
+    fun setHeader(view : View?) {
+        val month_left_button = view!!.findViewById<AppCompatImageButton>(R.id.cal_month_left)
+        val month_right_button = view.findViewById<AppCompatImageButton>(R.id.cal_month_right)
+        val month_text = view.findViewById<TextView>(R.id.cal_month_text)
+
+        month_left_button.setOnClickListener {
+            calDate.add(Calendar.MONTH, -1)
+            updateCalendar(view, calDate.clone() as Calendar)
+            setHeader(month_text)
+        }
+
+        month_right_button.setOnClickListener {
+            calDate.add(Calendar.MONTH, 1)
+            updateCalendar(view, calDate.clone() as Calendar)
+            setHeader(month_text)
+        }
+
+        month_text.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                val pd : YearMonthPicKerDialog<View> = YearMonthPickerDialog(view, "calendar")
+                pd.show(childFragmentManager, "YearMonthPicKerTest")
+            }
+        })
+        setHeaderDate(month_text)
+    }
+
+
+
+
+
 }
 
 
