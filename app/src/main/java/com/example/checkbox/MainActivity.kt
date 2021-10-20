@@ -255,6 +255,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
+
     fun CheckChangeData() {
         ChangeCheckThread = ThreadPoolExecutor(1, 3, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
         while (!NetworkIsValid(this)) { }
@@ -303,7 +304,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION")    // 'DEPRECATION'에 대한 경고 억제
     private fun NetworkIsValid(context: Context) : Boolean {
         var result = false
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
