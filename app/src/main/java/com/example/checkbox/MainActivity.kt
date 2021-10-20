@@ -19,11 +19,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_activity.*
+import java.io.IOException
+import java.lang.Exception
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -31,6 +34,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var exitView: View
+    private val REQUEST_TAKE_PHOTO = 200
     private var FINISH_INTERVAL_TIME: Long = 1500
     private var backPressedTime: Long = 0
     private var init : Boolean = false
@@ -182,6 +186,41 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             dlg.show()
         }
         return true
+    }
+
+    private fun captureCamera() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(packageManager) != null ) {
+            try {
+                val photoFile = createImageFile()
+                if (photoFile != null) {
+                    val providerURI = FileProvider.getUriForFile(this, packageName, photoFile)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI)
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                }
+            } catch (ex: IOException) {
+                Log.e("captureCamera Error", ex.toString())
+                return
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_TAKE_PHOTO -> {
+                Log.i("REQUEST_TAKE_PHOTO", "${Activity.RESULT_OK}" + " " + "${resultCode}")
+                if (resultCode == RESULT_OK) {
+                    try {
+                        galleryAddPic()
+                    }catch (e: Exception) {
+                        Log.e("REQUEST_TAKE_PHOTO", e.toString())
+                    }
+                } else {
+                    Toast.makeText(this@MainActivity, "사진찍기를 취소했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     fun CheckChangeData() {
