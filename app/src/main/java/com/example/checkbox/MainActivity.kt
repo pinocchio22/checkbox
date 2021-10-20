@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -242,6 +243,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         val imageFile = File(storageDir, imageFileName)
         mCurrentPhotoPath = imageFile.absolutePath
         return imageFile
+    }
+
+    private fun galleryAddPic() {
+        Log.i("galleryAddPic", "Call")
+        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE) // 새로 파일을 만드는것이 아닌 해당 경로의 파일을 객체화
+        val f = File(mCurrentPhotoPath)
+        val contentUri : Uri = Uri.fromFile(f)
+        mediaScanIntent.data = contentUri
+        sendBroadcast(mediaScanIntent)
+        Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
     fun CheckChangeData() {
