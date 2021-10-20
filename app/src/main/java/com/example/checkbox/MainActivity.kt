@@ -10,6 +10,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
@@ -25,8 +26,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_activity.*
+import java.io.File
 import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -40,6 +44,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private var init : Boolean = false
     private lateinit var vm : PhotoViewModel
     private lateinit var observer: ChangeObserver
+    lateinit var mCurrentPhotoPath: String
 
     companion object{
         var folder_type = 3
@@ -221,6 +226,22 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 }
             }
         }
+    }
+
+    @Throws(IOException::class)
+    fun createImageFile(): File? {
+        val timeStamp : String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "JPEG_$timeStamp.jpg"
+        val storageDir = File(
+                Environment.getExternalStorageDirectory().toString() + "/Pictures", "Cbox"
+        )
+        if (!storageDir.exists()) {
+            Log.i("mCurrentPhotoPath1", storageDir.toString())
+            storageDir.mkdirs() //File.mkdir = 만들고자 하는 디렉토리의 상위 디렉토리가 존재하지 않을 경우, 생성 불가 | File.mkdirs = 만들고자 하는 디렉토리의 상위 디렉토리가 존재하지 않을 경우, 상위 디렉토리까지 생성
+        }
+        val imageFile = File(storageDir, imageFileName)
+        mCurrentPhotoPath = imageFile.absolutePath
+        return imageFile
     }
 
     fun CheckChangeData() {
