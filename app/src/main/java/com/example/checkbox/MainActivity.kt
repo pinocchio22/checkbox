@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    @Throws(IOException::class)
+    @Throws(IOException::class) //IOException 클래스에 대해서는 예외처리
     fun createImageFile(): File? {
         val timeStamp : String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val imageFileName = "JPEG_$timeStamp.jpg"
