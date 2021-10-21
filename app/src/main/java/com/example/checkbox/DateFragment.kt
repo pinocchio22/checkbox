@@ -3,11 +3,13 @@ package com.example.checkbox
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -15,6 +17,7 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_cal.*
 import kotlinx.android.synthetic.main.fragment_cal.view.*
 import kotlinx.android.synthetic.main.main_activity.view.*
@@ -113,6 +116,19 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
         setHeaderDate(month_text)
     }
 
+    private fun setGridLayout(view : View?) {
+        val gridViewWrapper = view?.findViewById<LinearLayout>(R.id.cal_grid_wrapper)
+        val header = view?.findViewById<LinearLayout>(R.id.calendar_allheader)
+        val statusBar = resources.getIdentifier("status_bar_height", "dimen", "android")
+        val statusBarHeight = resources.getDimensionPixelSize(statusBar)
+
+        val displayMetrics = DisplayMetrics()
+        super.getActivity()!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val bnv = super.getActivity()!!.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        val padding = header!!.paddingTop + header.paddingBottom + gridViewWrapper!!.paddingTop + gridViewWrapper.paddingBottom
+        gridViewWrapper.layoutParams!!.height = displayMetrics.heightPixels - (header.layoutParams.height + bnv.height + statusBarHeight + padding)
+    }
 
 
 
