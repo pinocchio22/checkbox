@@ -86,7 +86,14 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
         notifyDataSetChanged()
     }
 
-    
+    fun Update(cells : ArrayList<Date>, month: Int) {
+        inputCheck++
+        clear()
+        MainHandler.removeMessages(0)
+        addAll(cells)
+        this.inputMonth = month
+        notifyDataSetChanged()
+    }
 
     private fun setExtraDay(textView : TextView, month : Int, week : Int) {
         // 다른 달 날짜
