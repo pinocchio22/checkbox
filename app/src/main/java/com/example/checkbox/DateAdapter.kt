@@ -96,16 +96,16 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
         notifyDataSetChanged()
     }
 
-    private fun setToday(textView : TextView, year : Int, month : Int, day : Int) {
-        val calendarToday = Calendar.getInstance()
-        if (year == calendarToday.get(Calendar.YEAR) &&
-                month == calendarToday.get(Calendar.MONTH) &&
-                day == calendarToday.get(Calendar.DAY_OF_MONTH)) {
-            textView.setTypeface(null, Typeface.BOLD)   // Typeface 클래스는 글꼴의 서체와 고유 스타일을 지정
-        } else {
-            textView.setTypeface(null, Typeface.NORMAL)
-        }
-    }
+//    private fun setToday(textView : TextView, year : Int, month : Int, day : Int) {
+//        val calendarToday = Calendar.getInstance()
+//        if (year == calendarToday.get(Calendar.YEAR) &&
+//                month == calendarToday.get(Calendar.MONTH) &&
+//                day == calendarToday.get(Calendar.DAY_OF_MONTH)) {
+//            textView.setTypeface(null, Typeface.BOLD)   // Typeface 클래스는 글꼴의 서체와 고유 스타일을 지정
+//        } else {
+//            textView.setTypeface(null, Typeface.NORMAL)
+//        }
+//    }
 
     private fun setExtraDay(textView : TextView, month : Int, week : Int) {
         // 다른 달 날짜
