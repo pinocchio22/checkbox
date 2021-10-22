@@ -1,5 +1,6 @@
 package com.example.checkbox
 
+import android.graphics.Color
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
     private var inputCheck : Int = 0
     private val vm = ViewModelProviders.of(context).get(PhotoViewModel::class.java)
     private var mLastClickTime : Long = 0
+    private var inputMonth : Int = inputMonth
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
@@ -77,6 +79,25 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
             }
         }
         return view
+    }
+
+    private fun setExtraDay(textView : TextView, month : Int, week : Int) {
+        // 다른 달 날짜
+        if (month != inputMonth) {
+            textView.setTextColor(Color.GRAY)
+        }
+        // saturday
+        else if (week == Calendar.SATURDAY) {
+            textView.setTextColor(Color.BLUE)
+        }
+        // sunday
+        else if (week == Calendar.SUNDAY) {
+            textView.setTextColor(Color.RED)
+        }
+        // extra
+        else {
+            textView.setTextColor(Color.BLACK)
+        }
     }
 
 
