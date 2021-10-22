@@ -187,6 +187,22 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
         gridViewWrapper.layoutParams!!.height = displayMetrics.heightPixels - (header.layoutParams.height + bnv.height + statusBarHeight + padding)
     }
 
+    private fun setColumnSize(view : View, count : Int) {
+        val displayMetrics = DisplayMetrics() // 크기, 밀도 및 글꼴 크기와 같은 디스플레이에 대한 일반 정보를 설명하는 구조
+        super.getActivity()!!.windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        val gridViewWrapper = view.findViewById<LinearLayout>(R.id.cal_grid_wrapper)
+        val density = context!!.resources.displayMetrics.density
+        val width = (displayMetrics.widthPixels - gridViewWrapper.paddingLeft - gridViewWrapper.paddingRight - (10*density).toInt()) / 7 - 1*density.toInt()
+        val height = (gridViewWrapper.layoutParams.height - 1*density.toInt()) / count - 1*density.toInt()
+
+        val gridAdapter = gridView.adapter as DateAdapter
+        size = Pair(width, height)
+        gridAdapter.setDateSize(size as Pair<Int, Int>)
+    }
+
+    
+
 
 
 
