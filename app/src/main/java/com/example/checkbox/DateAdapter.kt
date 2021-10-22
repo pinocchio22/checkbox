@@ -81,6 +81,13 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
         return view
     }
 
+    fun setDateSize(size : Pair<Int, Int>) {
+        this.size = size
+        notifyDataSetChanged()
+    }
+
+    
+
     private fun setExtraDay(textView : TextView, month : Int, week : Int) {
         // 다른 달 날짜
         if (month != inputMonth) {
@@ -99,12 +106,6 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
             textView.setTextColor(Color.BLACK)
         }
     }
-
-
-
-
-
-
 }
 
 
