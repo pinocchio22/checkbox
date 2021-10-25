@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +16,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.main_photoview.*
+import kotlinx.android.synthetic.main.schedule_insert.*
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author CHOI
@@ -179,6 +186,116 @@ class MainPhotoView : AppCompatActivity() {
                     val doc = data!!.getIntExtra("index", 0)
                     recyclerView.scrollToPosition(doc)
                 }
+            }
+        }
+    }
+
+    fun getExtra() {
+        checkboxList.clear()
+        list.clear()
+        val getname : String?
+        val title_type : ImageView = findViewById(R.id.title_type)
+        val title : TextView = findViewById(R.id.title_name)
+
+        when {
+            intent.hasExtra("dir_name") -> {
+                getname = intent.getStringExtra("dir_name")!!
+
+                DBThread.execute {
+                    getOpenDirByCursor(vm, vm.getOpenNameDirCursor(applicationContext, getname))
+                }
+
+                title_type.setImageResource(R.drawable.ic_folder)
+                title.text = File(getname).name
+            }
+
+            intent.hasExtra("location_name") -> {
+                getname = intent.getStringExtra("location_name")!!
+
+                val liveData = vm.getOpenLocationDirIdList(getname)
+                liveData.observe(this, androidx.lifecycle.Observer { idList ->
+                    DBThread.execute {
+                        getOpenDirByIdList(vm, idList)
+                    }
+                })
+
+                title_type.setImageResource(R.drawable.ic_location)
+                title.text = getname
+            }
+
+            intent.hasExtra("data_name") -> {
+                val cal = intent.getSerializableExtra("date_name") as Date
+                val calendar = Calendar.getInstance()
+
+                calendar.time = cal
+                DBThread.execute {
+                    getOpenDirByCursor(vm, vm.getOpenDateDirCursor(applicationContext, calendar))
+                }
+
+                val formatter = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
+                getname = formatter.format(calendar.time)
+
+                title_type.setImageResource(R.drawable.ic_cal)
+                title.text = getname
+            }
+
+            intent.hasExtra("tag_name") -> {
+                getname = intent.getStringExtra("tag_name")!!
+
+                val liveData = vm.getOpenTagDirIdList(getname)
+                liveData.observe(this, androidx.lifecycle.Observer { idList ->
+                    DBThread.execute {
+                        getOpenDirByIdList(vm, idList)
+                    }
+                })
+
+                title_type.setImageResource(R.drawable.ic_tag)
+                title.text = getname
+            }
+
+            intent.hasExtra("file_name") -> {
+                var filename = intent.getStringExtra("file_name")!!
+
+                    DBThread.execute {
+                        getOpenDirByIdList(vm, vm.getOpenFileDirCursor(applicationContext, filename))
+                    }
+
+                title_type.setImageResource(R.drawable.ic_name)
+                if (filename.length >= 23) {
+                    filename = filename.substring(0, 23)
+                    filename += ".."
+                }
+                title.text = filename
+            }
+
+            intent.hasExtra("favorite") -> {
+                val liveData = vm.getOpenFavoriteDirIdList()
+                var templist = listOf<Long>()
+                liveData.observe(this, androidx.lifecycle.Observer { idList ->
+                    if (idList != templist) {
+                        DBThread.execute {
+                            getOpenDirByIdList(vm, idList)
+                            MainHandler.post {
+                                setView(list)
+                                setPhotoSize(photo_type, 2)
+                            }
+                        }
+                    }
+                })
+
+                title_type.setImageResource(R.drawable.ic_favorite_checked)
+                title.text = "즐겨찾기"
+            }
+
+            intent.hasExtra("search_date") -> {
+                val date = intent.getStringExtra("search_date")!!
+                val cal : Calendar = Calendar.getInstance()
+                cal.set(date.substring(0, 4).toInt(), date.substring(6, 8).toInt() - 1, date.substring(10, 12).toInt(), 0, 0, 0)
+                DBThread.execute {
+                        getOpenDirByIdList(vm, vm.getOpenDateDirCursor(applicationContext, cal))
+                }
+                title_type.setImageResource(R.drawable.ic_cal)
+                title.text = date
             }
         }
     }
