@@ -1,7 +1,9 @@
 package com.example.checkbox
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,10 +24,12 @@ class MainPhotoView : AppCompatActivity() {
     private lateinit var recyclerView : RecyclerView
     var radiobtck: Boolean = false
     private lateinit var vm : PhotoViewModel
+    private var mLastClickTime : Long = 0
 
     companion object {
         var list = arrayListOf<thumbnailData>()
         var checkboxList = arrayListOf<checkboxData>()
+        var photo_type: Int = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,5 +130,19 @@ class MainPhotoView : AppCompatActivity() {
             radiobtck = true
         }
     }
-    
+
+    private fun setView(lst : ArrayList<thumbnailData>) {
+        recyclerAdapter = RecyclerAdapterPhoto(this, lst) {
+            thumbnailData, num -> if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
+                val intent = Intent(this, PhotoViewModel::class.java)
+            intent.putExtra("index", num)
+            startActivityForResult(intent, 100)
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+        }
+        recyclerView.adapter = recyclerAdapter
+        list = recyclerAdapter.getThumbnailList()
+        val lm = GridLayoutManager(MainPhotoView(), photo_type)
+        recyclerView.layoutManager = lm
+    }
 }
