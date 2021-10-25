@@ -151,7 +151,8 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
                 }
                 else {
                     val scheduleDlg : View = layoutInflater.inflate(R.layout.schedule_insert, null)
-                    val dlg = scheduleDialog(object  : scheduleDialog.dialogLister {
+                    val dlg = scheduleDialog(scheduleDlg, vm, cal)
+                    dlg.setDialogListener(object : scheduleDialog.dialogListener {
                         override fun refresh() {
                             updateCalendar(thisview, calDate.clone() as Calendar)
                         }

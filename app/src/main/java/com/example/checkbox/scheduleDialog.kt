@@ -1,6 +1,5 @@
 package com.example.checkbox
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.database.Cursor
 import android.os.Build
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

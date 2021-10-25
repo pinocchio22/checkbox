@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.main_photoview.*
@@ -20,6 +21,7 @@ class MainPhotoView : AppCompatActivity() {
     private lateinit var recyclerAdapter: RecyclerAdapterPhoto
     private lateinit var recyclerView : RecyclerView
     var radiobtck: Boolean = false
+    private lateinit var vm : PhotoViewModel
 
     companion object {
         var list = arrayListOf<thumbnailData>()
@@ -28,20 +30,25 @@ class MainPhotoView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.thumbnail_similarview)
-
+        setContentView(R.layout.main_photoview)
+        vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
+        radiobtck = radiobt.isChecked
+        SetHeader()
         recyclerView = findViewById(R.id.photo_recyclerView)
-        recyclerAdapter = RecyclerAdapterPhoto(this, list)
-        recyclerView.adapter = recyclerAdapter
-        list = recyclerAdapter.getThumbnailList()
-        val lm = GridLayoutManager(MainPhotoView(), 2)
-        recyclerView.layoutManager = lm
+        setView(arrayListOf())
+        getExtra()
+
+        updown_Listener(recyclerView)
+        updownEvent()
 
         photolist_delete.setOnClickListener{
             btck(1)
         }
         photolist_deletecancel.setOnClickListener {
             btck(0)
+        }
+        radiobt.setOnClickListener {
+            btck2()
         }
         photolist_deleteok.setOnClickListener {
             deletePhotoDlg()
