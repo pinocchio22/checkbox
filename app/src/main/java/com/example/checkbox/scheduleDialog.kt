@@ -1,5 +1,6 @@
 package com.example.checkbox
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
@@ -66,6 +67,30 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
             dlg.cancel()
         }
         return dlg
+    }
+
+    fun delete_schedule(maindlg : AlertDialog, data : CalendarData?) {
+        v.schedule_delete.setOnClickListener {
+            if (data?.title == null) {
+                Toast.makeText(context!!, "삭제할 일정이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val dlgbuilder : AlertDialog.Builder = AlertDialog.Builder(context!!)
+                dlgbuilder.setTitle("알림")
+                dlgbuilder.setMessage("일정을 정말 삭제하시겠습니까?")
+                dlgbuilder.setCancelable(false)
+                dlgbuilder.setIcon(R.drawable.ic_schedule_delete)
+                dlgbuilder.setPositiveButton("확인") { _, _ ->
+                    DeleteThread.execute {
+                        vm.Delete(calendar)
+                    }
+                    Toast.makeText(context!!, "일정이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    maindlg.cancel()
+                    interfaceDlg!!.refresh()
+                }
+                dlgbuilder.setNegativeButton("취소") { _, _ -> }
+            }
+        }
     }
 
     
