@@ -2,6 +2,7 @@ package com.example.checkbox
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -26,6 +27,9 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
     private val calendar = cal
     private val vm = vm
     private var interfaceDlg : dialogListener? = null
+    private lateinit var  recyclerAdapter : RecyclerAdapterPhoto
+    private var imgList = arrayListOf<thumbnailData>()
+    private var row = 3
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -90,6 +94,29 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
                 }
                 dlgbuilder.setNegativeButton("취소") { _, _ -> }
             }
+        }
+    }
+
+    private fun getOpenDirByCursor(vm : PhotoViewModel, cursor : Cursor?) {
+        if (vm.CursorIsValid(cursor)) {
+            do {
+                val data = vm.getThumbnailDataByCursor(cursor!!)
+                recyclerAdapter.addThumbnailList(data)
+                imgList.add(data)
+            } while (cursor!!.moveToNext())
+            cursor.close()
+            MainHandler.post {
+                if (imgList.size <= 2) row = 1
+                else if (imgList.size <= 8) row = 2
+                else if (imgList.size <= 20) row = 3
+                else if (imgList.size <= 30) row = 4
+                else row = 5
+                setView(imgList)
+                setPhotoSize(row, 2)
+            }
+        }
+        MainHandler.post {
+            if (imgList.size == 0) v.schedule_RecycleView.layoutParams.height = 0
         }
     }
 
