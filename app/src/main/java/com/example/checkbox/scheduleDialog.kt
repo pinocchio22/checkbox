@@ -9,8 +9,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.schedule_insert.view.*
+import kotlinx.android.synthetic.main.similar_image_select.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -120,7 +122,27 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
         }
     }
 
-    
+    override fun setView(list : ArrayList<thumbnailData>) {
+        recyclerAdapter = RecyclerAdapterPhoto(activity, list) { thumbnailData, num ->
+            val ImageSelectView : View = layoutInflater.inflate(R.layout.similar_image_select, null)
+            ImageLoder.execute (ImageLoad(context!!, ImageSelectView.select_photo, thumbnailData.photo_id, 0))
+            val dlgBuilder : AlertDialog.Builder = AlertDialog.Builder (    // 확인 다이얼로그
+                context!!)
+
+            dlgBuilder.setView(ImageSelectView)
+            val dlgselect = dlgBuilder.create()
+
+            dlgselect.show()
+            ImageSelectView.select_cancel.setOnClickListener {
+                dlgselect.cancel()
+            }
+        }
+        recyclerView.adapter = recyclerAdapter
+        val lm = GridLayoutManager(context, row)
+        recyclerView.layoutManager = lm
+    }
+
+
 }
 
 

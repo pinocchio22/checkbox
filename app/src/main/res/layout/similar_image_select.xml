@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/similarbg" >
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin = "0.8dp">
+
+        <com.ortiz.touchview.TouchImageView
+          android:id="@+id/select_photo"
+          android:layout_width="360dp"
+          android:layout_height="640dp"
+          android:layout_gravity="center_vertical|center_horizontal" />
+
+        <ImageView
+            android:id="@+id/select_cancel"
+            android:layout_margin="5dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/back_similar" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</LinearLayout>
