@@ -50,6 +50,24 @@ class SwipeGesture(v : View) : GestureDetector.OnGestureListener {
         val month_right_button = v.findViewById<AppCompatImageButton>(R.id.cal_month_right)
         month_right_button.performClick()
     }
+
+    override fun onShowPress(e: MotionEvent?) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onDown(e: MotionEvent?): Boolean {
+        return true
+    }
+
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+        return true
+    }
+
+    override fun onLongPress(e: MotionEvent?) {
+    }
 }
 
 
