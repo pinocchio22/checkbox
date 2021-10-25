@@ -1,5 +1,6 @@
 package com.example.checkbox
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -164,6 +165,26 @@ class MainPhotoView : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        setPhotoSize(photo_type, 2)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                100 -> {
+                    val doc = data!!.getIntExtra("index", 0)
+                    recyclerView.scrollToPosition(doc)
+                }
+            }
+        }
+    }
+
+    
+
 
 
 
