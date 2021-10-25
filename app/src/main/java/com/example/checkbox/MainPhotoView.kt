@@ -8,6 +8,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -156,6 +157,14 @@ class MainPhotoView : AppCompatActivity() {
 
         recyclerAdapter.setPhotoSize(size, padding)
     }
+
+    private fun SetHeader() {
+        val toolbar = findViewById<Toolbar>(R.id.photo_toolbar)
+        toolbar.bringToFront()
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = null
+    }
+
 
 
 }
