@@ -3,6 +3,7 @@ package com.example.checkbox
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.widget.AppCompatImageButton
 import java.lang.Exception
 
 /**
@@ -14,6 +15,9 @@ import java.lang.Exception
 class SwipeGesture(v : View) : GestureDetector.OnGestureListener {
     private val SWIPE_THRESHOLD = 100
     private val SWIPE_VELOCITY_THRESHOLD = 100
+    val month_left_button = v.findViewById<AppCompatImageButton>(R.id.cal_month_left)
+    val month_right_button = v.findViewById<AppCompatImageButton>(R.id.cal_month_right)
+    val v = v
 
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
         var result = false
@@ -37,7 +41,15 @@ class SwipeGesture(v : View) : GestureDetector.OnGestureListener {
         return result
     }
 
-    
+    fun onSwipeRight() {
+        val month_left_button = v.findViewById<AppCompatImageButton>(R.id.cal_month_left)
+        month_left_button.performClick()
+    }
+
+    fun onSwipeLeft() {
+        val month_right_button = v.findViewById<AppCompatImageButton>(R.id.cal_month_right)
+        month_right_button.performClick()
+    }
 }
 
 
