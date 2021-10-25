@@ -113,7 +113,7 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
 
         month_text.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
-                val pd : YearMonthPicKerDialog<View> = YearMonthPickerDialog(view, "calendar")
+                val pd : YearMonthPickerDialog<View> = YearMonthPickerDialog(view, "calendar")
                 pd.show(childFragmentManager, "YearMonthPicKerTest")
             }
         })
@@ -199,6 +199,12 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
         val gridAdapter = gridView.adapter as DateAdapter
         size = Pair(width, height)
         gridAdapter.setDateSize(size as Pair<Int, Int>)
+    }
+
+    fun setHeaderDate(month_text : TextView) {
+        val year = calDate.get(Calendar.YEAR).toString()
+        val month = (calDate.get(Calendar.MONTH) + 1).toString()
+        month_text.text = "$year 년 $month 월"
     }
 
     
