@@ -15,7 +15,7 @@ import com.example.checkbox.MainPhotoView.Companion.checkboxList
  * @created 2021-10-14
  * @desc
  */
-class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnailData>) : RecyclerView.Adapter<RecyclerAdapterPhoto.Holder>()
+class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnailData>, val itemClick : (thumbnailData, Int) -> Unit) : RecyclerView.Adapter<RecyclerAdapterPhoto.Holder>()
 {
     private lateinit var view : View
     private var padding_size = 200
@@ -68,6 +68,46 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(list[position], position)
+    }
+
+    fun setPhotoSize(size : Int, padiing_size : Int) {
+        this.size = size
+        this.padding_size = padding_size
+        notifyDataSetChanged()
+    }
+
+    fun setThumbnailList(list : ArrayList<thumbnailData>?) {
+        if (list.isNullOrEmpty()) this.list = arrayListOf()
+        else {
+            var thisIndex = 0
+            for(pData in list) {
+                do {
+                    val pre = if (thisIndex < this.list.size) {
+                        pData.data.compareTo(this.list[thisIndex].data)
+                    }
+                    else { Int.MIN_VALUE }
+                    // pre > 0 : 이전 데이터가 사라진 경우
+                    if (pre > 0) {
+                        if (this.list[thisIndex].photo_id != pData.photo_id) {
+                            this.list[thisIndex].photo_id = pData.photo_id
+                            checkboxList[thisIndex].id = pData.photo_id
+                            MainHandler.post { notifyItemChanged(thisIndex) }
+                        }
+                        ++thisIndex
+                        break
+                    }
+                    // 삽입
+                    else {
+                        this.list.add(thisIndex, pData)
+
+                        checkboxList.add(thisIndex, checkboxData(pData.photo_id, false))
+                        MainHandler.post { notifyItemInserted(thisIndex) }
+                        ++thisIndex
+                        break
+                    }
+                } while (true)
+            }
+        }
     }
 
     fun setCheckAll(boolean: Boolean) {
