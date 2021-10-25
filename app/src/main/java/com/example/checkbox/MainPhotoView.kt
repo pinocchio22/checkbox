@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -145,4 +146,16 @@ class MainPhotoView : AppCompatActivity() {
         val lm = GridLayoutManager(MainPhotoView(), photo_type)
         recyclerView.layoutManager = lm
     }
+
+    private fun setPhotoSize(row : Int, padding : Int) {
+        val displayMetrics = DisplayMetrics()
+        this.windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        val width = displayMetrics.widthPixels
+        val size = width / row - 2 * padding
+
+        recyclerAdapter.setPhotoSize(size, padding)
+    }
+
+
 }
