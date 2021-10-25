@@ -96,6 +96,7 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
                     interfaceDlg!!.refresh()
                 }
                 dlgbuilder.setNegativeButton("취소") { _, _ -> }
+                dlgbuilder.create().show()
             }
         }
     }
@@ -123,7 +124,12 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
         }
     }
 
-    override fun setView(list : ArrayList<thumbnailData>) {
+    override fun onResume() {
+        super.onResume()
+        setPhotoSize(row, 2)
+    }
+
+    private fun setView(list : ArrayList<thumbnailData>) {
         recyclerAdapter = RecyclerAdapterPhoto(activity, list) { thumbnailData, num ->
             val ImageSelectView : View = layoutInflater.inflate(R.layout.similar_image_select, null)
             ImageLoder.execute (ImageLoad(context!!, ImageSelectView.select_photo, thumbnailData.photo_id, 0))
@@ -155,7 +161,13 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
         })
     }
 
-    
+    public fun setDialogListener(listener : dialogListener) {
+        this.interfaceDlg = listener
+    }
+
+    interface dialogListener {
+        fun refresh()
+    }
 
 
 }
