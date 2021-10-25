@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
@@ -141,6 +142,20 @@ class scheduleDialog(v : View, vm : PhotoViewModel, cal : Calendar) : DialogFrag
         val lm = GridLayoutManager(context, row)
         recyclerView.layoutManager = lm
     }
+
+    private fun setPhotoSize(row : Int, padding : Int) {
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener( object : ViewTreeObserver.OnGlobalLayoutListener {
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+            override fun onGlobalLayout() {
+                val width = recyclerView.width
+                val size = width / row - 2 * padding
+                recyclerAdapter.setPhotoSize(size, padding)
+                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+    
 
 
 }
