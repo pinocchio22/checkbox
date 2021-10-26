@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
@@ -322,6 +323,30 @@ class MainPhotoView : AppCompatActivity() {
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
+
+    fun updownEvent() {
+        updown_Listener(recyclerView)
+        val onScrollListener = object : RecyclerView.OnScrollListener() {
+            var temp = 0
+            override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (temp == 1) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    up_button.visibility = View.GONE
+                    down_button.visibility = View.GONE
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                up_button.visibility = View.VISIBLE
+                down_button.visibility = View.VISIBLE
+                temp = 1
+            }
+        }
+        this.recyclerView.setOnScrollListener(onScrollListener)
+    }
+
+
 
 
 
