@@ -3,6 +3,7 @@ package com.example.checkbox
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.DisplayMetrics
@@ -346,7 +347,17 @@ class MainPhotoView : AppCompatActivity() {
         this.recyclerView.setOnScrollListener(onScrollListener)
     }
 
-
+    private fun getOpenDirByCursor(vm : PhotoViewModel, cursor : Cursor?) {
+        if (vm.CursorIsValid(cursor)) {
+            do {
+                val data = vm.getThumbnailDataByCursor(cursor!!)
+                recyclerAdapter.addThumbnailList(data)
+            } while (cursor!!.moveToNext())
+            cursor.close()
+            MainHandler.post { setView(list)
+            setPhotoSize(photo_type, 2)}
+        }
+    }
 
 
 
