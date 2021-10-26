@@ -4,14 +4,12 @@ import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.location.Geocoder
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
-import androidx.annotation.RequiresApi
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.gms.maps.model.LatLng
 import java.io.FileNotFoundException
@@ -39,7 +37,8 @@ object MediaStore_Dao {
         }
         val sortOrder = MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME + " ASC"
 
-        val cursor = context.contentResolver.query(uri, projection, selection, null, sortOrder)
+//        val cursor = context.contentResolver.query(uri, projection, selection, null, sortOrder) selection 문제(query에 문제가 있는듯함..)
+        val cursor = context.contentResolver.query(uri, projection, null, null, sortOrder)
         if(!cursorIsValid(cursor)) return thumbList
 
         do {
