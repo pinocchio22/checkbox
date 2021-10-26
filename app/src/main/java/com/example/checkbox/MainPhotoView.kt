@@ -17,6 +17,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checkbox.MainActivity.Companion.photo_type
+import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.main_photoview.*
 import kotlinx.android.synthetic.main.schedule_insert.*
 import java.io.File
@@ -42,7 +44,6 @@ class MainPhotoView : AppCompatActivity() {
     companion object {
         var list = arrayListOf<thumbnailData>()
         var checkboxList = arrayListOf<checkboxData>()
-        var photo_type: Int = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -260,7 +261,7 @@ class MainPhotoView : AppCompatActivity() {
                 var filename = intent.getStringExtra("file_name")!!
 
                     DBThread.execute {
-                        getOpenDirByIdList(vm, vm.getOpenFileDirCursor(applicationContext, filename))
+                        getOpenDirByCursor(vm, vm.getOpenFileDirCursor(applicationContext, filename))
                     }
 
                 title_type.setImageResource(R.drawable.ic_name)
@@ -295,7 +296,7 @@ class MainPhotoView : AppCompatActivity() {
                 val cal : Calendar = Calendar.getInstance()
                 cal.set(date.substring(0, 4).toInt(), date.substring(6, 8).toInt() - 1, date.substring(10, 12).toInt(), 0, 0, 0)
                 DBThread.execute {
-                        getOpenDirByIdList(vm, vm.getOpenDateDirCursor(applicationContext, cal))
+                        getOpenDirByCursor(vm, vm.getOpenDateDirCursor(applicationContext, cal))
                 }
                 title_type.setImageResource(R.drawable.ic_cal)
                 title.text = date
@@ -359,7 +360,11 @@ class MainPhotoView : AppCompatActivity() {
         }
     }
 
-
+    private fun getOpenDirByIdList(vm : PhotoViewModel, idList : List<Long>) {
+        val list = vm.getThumbnailListByIdList(this, idList)
+        recyclerAdapter.setThumbnailList(list)
+        MainPhotoView.list = list
+    }
 
 
 
