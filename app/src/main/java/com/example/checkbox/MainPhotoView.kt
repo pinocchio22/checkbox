@@ -304,9 +304,13 @@ class MainPhotoView : AppCompatActivity() {
         up_button.setOnClickListener {
             view?.scrollToPosition(0)
         }
+
+        down_button.setOnClickListener {
+            view?.scrollToPosition(recyclerAdapter.getSize() - 1)
+        }
     }
 
-    
+
 
     
 
