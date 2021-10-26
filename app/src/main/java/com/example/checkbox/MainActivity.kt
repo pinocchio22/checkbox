@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     companion object{
         var folder_type = 3
         var photo_type: Int = 3
+        var location_type: Int = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
