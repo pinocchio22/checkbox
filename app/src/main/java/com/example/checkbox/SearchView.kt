@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.AdapterView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -89,6 +91,20 @@ class SearchView : AppCompatActivity() {
                 recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    fun dateQuery() {
+        searchview_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent : AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                if (position == 3)
+                    dialogCreate(searchview)
+                else
+                    searchview.isIconified = false
+            }
+        }
     }
 
 
