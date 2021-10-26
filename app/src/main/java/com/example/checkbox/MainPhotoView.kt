@@ -35,6 +35,7 @@ class MainPhotoView : AppCompatActivity() {
     var radiobtck: Boolean = false
     private lateinit var vm : PhotoViewModel
     private var mLastClickTime : Long = 0
+    private var delete_check = 0
 
     companion object {
         var list = arrayListOf<thumbnailData>()
@@ -313,6 +314,17 @@ class MainPhotoView : AppCompatActivity() {
     override fun onBackPressed() {
         finishActivity()
     }
+
+    private fun finishActivity() {
+        val intent = Intent()
+        if (delete_check == 1)
+            intent.putExtra("delete_check", delete_check)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
+
+
+
 
 
 
