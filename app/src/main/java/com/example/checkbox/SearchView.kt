@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -174,6 +175,17 @@ class SearchView : AppCompatActivity() {
                 return true
             }
         })
+    }
+
+    fun sizeCheck() {
+        if (recyclerAdapter.getItemCount() == 0) {
+            Toast.makeText(this@SearchView, "결과가 없어요. 다시 검색해주세요.", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            setPhotoSize(folder_type, 10)
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(searchview.windowToken, 0)
+        }
     }
 
 
