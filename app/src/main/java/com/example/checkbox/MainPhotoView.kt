@@ -310,6 +310,12 @@ class MainPhotoView : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finishActivity()
+    }
+
+
+
 
 
     
