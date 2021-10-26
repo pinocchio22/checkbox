@@ -1,11 +1,14 @@
 package com.example.checkbox
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -81,7 +84,18 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
         recyclerView?.layoutManager = lm
     }
 
-
+    private fun setPhotoSize(view : View, row : Int, padding : Int) {
+        val recyclerView = view.findViewById<RecyclerView>(R.id.fragment_RecycleView)
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener( object : ViewTreeObserver.OnGlobalLayoutListener {
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+            override fun onGlobalLayout() {
+                val width = recyclerView.width
+                val size = width / row - 2 * padding
+                recyclerAdapter.setPhotoSize(size, padding)
+                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
 
 
 }
