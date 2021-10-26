@@ -1,6 +1,8 @@
 package com.example.checkbox
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.checkbox.MainActivity.Companion.folder_type
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.main_activity.view.*
 
@@ -23,6 +28,7 @@ class TagFragment (val v : AppBarLayout) : Fragment() {
     private lateinit var thisview : View
     private lateinit var liveData : LiveData<List<thumbnailData>>
     private lateinit var recyclerAdapter : RecyclerAdapterFolder
+    private var mLastClickTime : Long = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         ab.main_toolbar.visibility = View.VISIBLE
@@ -39,6 +45,28 @@ class TagFragment (val v : AppBarLayout) : Fragment() {
         })
 
         return thisview
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setPhotoSize(this.view!!, folder_type, 10)
+    }
+
+    private fun setView(view : View?) {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.fragment_RecycleView)
+        recyclerAdapter = RecyclerAdapterFolder(activity, ArrayList(), 1)
+        {thumbnailData ->
+            if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
+                val intent = Intent(activity, MainPhotoView::class.java)
+                intent.putExtra("tag_name", thumbnailData.data)
+                startActivityForResult(intent, 203)
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+        }
+        recyclerView?.adapter = recyclerAdapter
+
+        val lm = GridLayoutManager(MainActivity(), folder_type)
+        recyclerView?.layoutManager = lm
     }
 
 
