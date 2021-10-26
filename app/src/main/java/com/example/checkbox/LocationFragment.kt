@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.checkbox.MainActivity.Companion.folder_type
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.main_activity.view.*
 
@@ -39,6 +40,15 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
         })
 
         return thisview
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setPhotoSize(this.view!!, folder_type, 10)
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
 
