@@ -299,6 +299,14 @@ class MainPhotoView : AppCompatActivity() {
             }
         }
     }
+    
+    fun updown_Listener(view : RecyclerView?) {
+        up_button.setOnClickListener {
+            view?.scrollToPosition(0)
+        }
+    }
+
+    
 
     
 
