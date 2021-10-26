@@ -7,6 +7,7 @@ import android.os.SystemClock
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.checkbox.MainActivity.Companion.folder_type
 import kotlinx.android.synthetic.main.main_photoview.*
 import kotlinx.android.synthetic.main.search_view.*
+import java.lang.Exception
 import java.util.*
 
 /**
@@ -105,6 +107,73 @@ class SearchView : AppCompatActivity() {
                     searchview.isIconified = false
             }
         }
+    }
+
+    fun searchResult() {
+        searchview.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                thumbnailList = arrayListOf()
+                when(searchview_spinner.selectedItemPosition) {
+                    0 -> {
+                        setView("tag_name")
+                        DirectoryThread.execute {
+                            thumbnailList = vm.getTagDirSearch(query!!)
+                            MainHandler.post {
+                                recyclerAdapter.setThumbnailList(thumbnailList)
+                                sizeCheck()
+                            }
+                        }
+                    }   //태그
+
+                    1 -> {
+                        setView("location_name")
+                        DirectoryThread.execute {
+                            thumbnailList = vm.getLocationDirSearch(query!!)
+                            MainHandler.post {
+                                recyclerAdapter.setThumbnailList(thumbnailList)
+                                sizeCheck()
+                            }
+                        }
+                    }   //위치
+
+                    2 -> {
+                        setView("file_name")
+                        DirectoryThread.execute {
+                            thumbnailList = vm.getNameDirSearch(searchview.context, query!!)
+                            MainHandler.post {
+                                recyclerAdapter.setThumbnailList(thumbnailList)
+                                sizeCheck()
+                            }
+                        }
+                    }   //이름
+
+                    3 -> {
+                        val cal : Calendar = Calendar.getInstance()
+                        try {
+                            if (query!!.length == 7) cal.set(query!!.substring(0, 4).toInt(), query.substring(5, 7).toInt() - 1, 1, 0, 0, 0)
+                            else if (query!!.length == 6) cal.set(query!!.substring(0, 4).toInt(), query.substring(5, 6).toInt() - 1, 1, 0, 0, 0)
+                            setView("date_name")
+
+                            DirectoryThread.execute {
+                                thumbnailList = vm.getDateDirSearch(searchview.context, cal)
+                                MainHandler.post {
+                                    recyclerAdapter.setThumbnailList(thumbnailList)
+                                    sizeCheck()
+                                }
+                            }
+                        } catch (e : Exception) {
+                            Toast.makeText(this@SearchView, "올바른 날짜 정보를 입력해주세요. (ex. 2020 03)", Toast.LENGTH_SHORT).show()
+                        }
+                    }   //날짜
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // mAdapter!!.filter.filter(query)
+                return true
+            }
+        })
     }
 
 
