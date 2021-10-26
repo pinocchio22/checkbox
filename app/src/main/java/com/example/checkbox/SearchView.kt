@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.ViewTreeObserver
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -75,6 +76,19 @@ class SearchView : AppCompatActivity() {
 
         val lm = GridLayoutManager(MainActivity(), folder_type)
         recyclerView.layoutManager = lm
+    }
+
+    private fun setPhotoSize(row : Int, padding : Int) {
+        recyclerView = findViewById<RecyclerView>(R.id.search_recyclerView)
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener( object : ViewTreeObserver.OnGlobalLayoutListener {
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+            override fun onGlobalLayout() {
+                val width = recyclerView.width
+                val size = width / row - 2 * padding
+                recyclerAdapter.setPhotoSize(size, padding)
+                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
 
