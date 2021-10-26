@@ -188,9 +188,10 @@ class SearchView : AppCompatActivity() {
         }
     }
 
-
-
-
+    fun dialogCreate(view : View) {
+        val pd : YearMonthPickerDialog<View> = YearMonthPickerDialog(view, "search")
+        pd.show(supportFragmentManager, "YearMonthPickerTest")
+    }
 }
 
 
