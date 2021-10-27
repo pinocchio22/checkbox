@@ -171,7 +171,30 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSION_STORAGE -> for (i in grantResults.indices) {
+                // grantResults[] : 허용된 권한은 0, 거부한 권한은 -1
+                if (grantResults[i] < 0) {
+                    Toast.makeText(this@SplashActivity, "앱을 사용하기 위해서는 해당 권한을 활성화 하셔야 합니다.", Toast.LENGTH_SHORT).show()
+                    checkPermission()
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                        checkPermissionLocation()
+                    else
+                        translation_api()
+                }
+            }
+            MY_PERMISSION_LOCATION -> for (i in grantResults.indices) {
+                // grantResults[] : 허용된 권한은 0, 거부한 권한은 -1
+                if (grantResults[i] < 0) {
+                    Toast.makeText(this@SplashActivity, "앱을 사용하기 위해서는 해당 권한을 활성화 하셔야 합니다.", Toast.LENGTH_SHORT).show()
+                    checkPermissionLocation()
+                } else
+                    translation_api()
+            }
+        }
+    }
 
     companion object {
         val MY_PERMISSION_STORAGE = 1111
