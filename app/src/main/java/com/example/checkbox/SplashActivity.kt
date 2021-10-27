@@ -63,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
                 finish()
             } else {
                 dlg.setTitle("환영합니다")   // 제목
-                dlg.setMessage("추가 파일 서치가 필ㅇ합니다. 와이파이를 연결해주세여. \n\n 다운로드 하시겠습니까? (30mb)")   // 메시지
+                dlg.setMessage("추가 파일 설치가 필요합니다. 와이파이를 연결해주세요. \n\n 다운로드 하시겠습니까? (30mb)")   // 메시지
                 dlg.setCancelable(false)
                 dlg.setPositiveButton("확인", DialogInterface.OnClickListener{ dialog, which ->
                     loading()
