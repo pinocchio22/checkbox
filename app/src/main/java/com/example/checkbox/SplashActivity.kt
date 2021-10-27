@@ -92,6 +92,11 @@ class SplashActivity : AppCompatActivity() {
         )
     }
 
+    fun loadingEnd() {
+        Handler().postDelayed(
+                { progressDialog?.dismiss() }, 0
+        )
+    }
 
 
 
