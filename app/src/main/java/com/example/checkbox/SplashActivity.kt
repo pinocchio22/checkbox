@@ -2,11 +2,13 @@ package com.example.checkbox
 
 import android.R
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -25,6 +27,8 @@ import kotlin.system.exitProcess
  * @desc
  */
 class SplashActivity : AppCompatActivity() {
+
+    private var progressDialog : ProgressDialog? = null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +79,19 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun loading() {
+        Handler().postDelayed(
+                {
+                    progressDialog = ProgressDialog(this)
+                    progressDialog!!.setIndeterminate(true)
+                    progressDialog!!.setCancelable(false)
+                    progressDialog!!.setMessage("필요한 파일을 다운로드 중입니다. \n잠시만 기다려 주세요.")
+                    progressDialog!!.show()
+                }, 0
+        )
+    }
+
 
 
 
