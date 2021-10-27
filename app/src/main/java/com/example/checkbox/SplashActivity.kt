@@ -108,7 +108,7 @@ class SplashActivity : AppCompatActivity() {
             // 처음 호출시에는 if() 부분이 false 이므로 else{..}로 넘어감
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
             {
-                android.app.AlertDialog.Builder(this, R.style.Theme_Material_Light_NoActionBar)
+                android.app.AlertDialog.Builder(this, R.style.Theme_Material_Light_Dialog_NoActionBar)
                         .setTitle("알림")
                         .setMessage("저장소 권한이 거부되었습니다. 사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.")
                         .setNeutralButton("설정", object : DialogInterface.OnClickListener{
@@ -132,6 +132,41 @@ class SplashActivity : AppCompatActivity() {
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
                 MY_PERMISSION_STORAGE)
+            }
+        }
+    }
+
+    private fun checkPermissionLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_MEDIA_LOCATION) !== PackageManager.PERMISSION_GRANTED)
+        {
+            // 다시 보지 않기 버튼이 필요하면 이 부분에 요청 (else{} 부분 제거)
+            // 처음 호출시에는 if() 부분이 false 이므로 else{..}로 넘어감
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_MEDIA_LOCATION))
+            {
+                android.app.AlertDialog.Builder(this, R.style.Theme_Material_Light_Dialog_NoActionBar)
+                        .setTitle("알림")
+                        .setMessage("저장소 권한이 거부되었습니다. 사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.")
+                        .setNeutralButton("설정", object : DialogInterface.OnClickListener{
+                            override fun onClick(dialogInterface: DialogInterface, i: Int) {
+                                Toast.makeText(this@SplashActivity, "저장소 권한을 활성화하고 앱을 다시 실행시켜 주세요.", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                intent.data = Uri.parse("package:" + packageName)
+                                startActivity(intent)
+                                finish()
+                            }
+                        })
+                        .setPositiveButton("확인", object : DialogInterface.OnClickListener {
+                            override fun onClick(dialogInterface: DialogInterface, i: Int) {
+                                finish()
+                                System.exit(0)
+                            }
+                        })
+                        .setCancelable(false)
+                        .create()
+                        .show()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+                        MY_PERMISSION_LOCATION)
             }
         }
     }
