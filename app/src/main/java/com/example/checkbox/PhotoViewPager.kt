@@ -1,5 +1,6 @@
 package com.example.checkbox
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.Layout
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import com.example.checkbox.MainPhotoView.Companion.list
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.photoview_frame.*
 import java.lang.Exception
@@ -91,6 +93,46 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
     override fun onBackPressed() {
         finishActivity()
     }
+
+    @SuppressLint("SimpleDateFromat")
+    fun toolbar_text(position : Int) {
+        val id = list[position].photo_id
+
+        DBThread.execute {
+            val data = vm.getName(this.applicationContext, id)
+            MainHandler.post { text_name.text = data }
+        }
+
+        DBThread.execute {
+            val data = vm.getStringDate(applicationContext, id)
+            MainHandler.post { date_name.text = data }
+        }
+
+        DBThread.execute {
+            val data = vm.getLocation(applicationContext, id)
+            MainHandler.post { location_name.text = data }
+        }
+
+        DBThread.execute {
+            val data = vm.getTags(id)
+            MainHandler.post { tag_name.text = data }
+        }
+
+        DBThread.execute {
+            val data = vm.getFavorite(id)
+            if (data) favorite.setImageResource(R.drawable.ic_favorite_checked)
+            else favorite.setImageResource(R.drawable.ic_favorite)
+        }
+
+        favorite.setOnClickListener {
+            DBThread.execute {
+                val data = vm.changeFavorite(id)
+                if (data) favorite.setImageResource(R.drawable.ic_favorite_checked)
+                else favorite.setImageResource(R.drawable.ic_favorite)
+            }
+        }
+    }
+
 
 
 }
