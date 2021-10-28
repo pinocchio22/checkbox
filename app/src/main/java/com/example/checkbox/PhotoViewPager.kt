@@ -133,6 +133,15 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         }
     }
 
+    fun getExtra() {
+        if (intent.hasExtra("index")) {
+            index = intent.getIntExtra("index", 0)
+        }
+        else {
+            Toast.makeText(this, "전달된 이름이 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
 
 }
