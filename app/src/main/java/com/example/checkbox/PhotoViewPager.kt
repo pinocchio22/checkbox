@@ -15,11 +15,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.example.checkbox.MainPhotoView.Companion.list
+import com.example.checkbox.Main_Map.Companion.latLngList
+import com.example.checkbox.Main_Map.Companion.removelist
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.photoview_frame.*
 import java.io.ByteArrayOutputStream
@@ -45,6 +48,7 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
     private var recyclerAdapter : PagerRecyclerAdapter ?= null
 
     private var index = 0
+    private var delete_check: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -199,6 +203,38 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path : String = MediaStore.Images.Media.insertImage(context.contentResolver, inImage, "Title", null)
         return Uri.parse(path)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun delete(view : View, toolbar : androidx.appcompat.widget.Toolbar, bottombar: View) {
+        val dlg : AlertDialog.Builder = AlertDialog.Builder(this@PhotoViewPager)
+        dlg.setTitle("알림")
+        dlg.setMessage("사진을 정말 삭제하시겠습니까?")
+        dlg.setCancelable(false)
+        dlg.setIcon(R.drawable.ic_delete)
+        dlg.setPositiveButton("확인") { _, _ ->
+            val id = list[index].photo_id
+            DeleteThread.execute { vm.Delete(this, id) }
+
+            list.removeAt(index)
+            if (latLngList.isNotEmpty()) {
+                removelist.add(latLngList[index])
+                latLngList.removeAt(index)
+            }
+            Toast.makeText(this, "삭제 완료 되었습니다.", Toast.LENGTH_SHORT).show()
+            if (list.size == 0) {
+                finishActivity()
+            } else {
+                if (index >= list.size) {
+                    index -= 1
+                }
+                setView(view, toolbar, bottombar)
+                toolbar_text(index)
+            }
+            delete_check = 1
+        }
+        dlg.setNegativeButton("취소") { _, _ -> }
+        dlg.show()
     }
 
 
