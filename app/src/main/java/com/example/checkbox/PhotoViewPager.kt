@@ -33,6 +33,7 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
     private lateinit var location_name : AppCompatTextView
     private lateinit var Inflater : LayoutInflater
     private lateinit var viewPager : ViewPager
+    private var recyclerAdapter : PagerRecyclerAdapter ?= null
 
     private var index = 0
 
@@ -75,6 +76,16 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
                 toolbar_text(position)
             }
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun setView(view : View, toolbar : androidx.appcompat.widget.Toolbar, bottombar : View) {
+        viewPager = view.findViewById(R.id.imgViewPager)
+        recyclerAdapter = PagerRecyclerAdapter(this, list, toolbar, bottombar)
+
+        viewPager.adapter = recyclerAdapter
+        viewPager.adapter!!.notifyDataSetChanged()
+        viewPager.setCurrentItem(index, false)
     }
 
 
