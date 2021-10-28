@@ -1,6 +1,7 @@
 package com.example.checkbox
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -237,8 +238,12 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         dlg.show()
     }
 
-
-
+    private fun finishActivity() {
+        val intent = Intent()
+        intent.putExtra("index", index)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
 }
 
 
