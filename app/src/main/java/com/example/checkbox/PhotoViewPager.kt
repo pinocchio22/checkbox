@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Layout
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -140,6 +141,26 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         else {
             Toast.makeText(this, "전달된 이름이 없습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+
+        when(p0.itemId) {
+            R.id.menu_tag_insert -> {
+                insertTag()
+            }
+            R.id.menu_share -> {
+                share()
+            }
+            R.id.menu_similar -> {
+                similarImage()
+            }
+            R.id.menu_delete -> {
+                delete(imgViewPager, mainphoto_toolbar, bottom_photo_menu)
+            }
+        }
+        return true
     }
 
 
