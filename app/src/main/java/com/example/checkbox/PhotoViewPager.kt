@@ -163,6 +163,13 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         return true
     }
 
+    private fun similarImage() {
+        val similarImageDialogView : View = layoutInflater.inflate(R.layout.similar_image_layout, null)
+        val dlg = similarImageDialog(similarImageDialogView, vm, index, tag_name)
+        dlg.iscancelable = false
+        dlg.show(supportFragmentManager, "tagInsertDialog")
+    }
+
 
 
 }
