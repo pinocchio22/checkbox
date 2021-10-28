@@ -1,6 +1,8 @@
 package com.example.checkbox
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Layout
@@ -175,6 +177,17 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         val dlg = tagInsertDialog(popupInputDialogView, vm, index, tag_name)
         dlg.isCancelable = false
         dlg.show(supportFragmentManager, "tagInsertDialog")
+    }
+
+    private fun share() {
+        val intent = Intent(Intent.ACTION_SEND)
+        var bitmap = getImage(this, list[index].photo_id)
+        bitmap = MediaStore_Dao.modifyOrientaionById(this, list[index].photo_id, bitmap)
+        val uri : Uri? = getImageUri(this, bitmap)
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        val chooser = Intent.createChooser(intent, "친구에게 공유하기")
+        startActivity(chooser)
     }
 
 
