@@ -88,6 +88,9 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
         viewPager.setCurrentItem(index, false)
     }
 
+    override fun onBackPressed() {
+        finishActivity()
+    }
 
 
 }
