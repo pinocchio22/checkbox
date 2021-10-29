@@ -111,8 +111,17 @@ class RecyclerAdapterDialog (val context : Activity?, var list : ArrayList<thumb
         return checkboxSet
     }
 
+    fun getThumbnailList() : ArrayList<thumbnailData> {
+        return list
+    }
 
+    fun addThumbnailList(data : thumbnailData) {
+        list.add(data)
+    }
 
+    fun getSize() : Int {
+        return list.size
+    }
 }
 
 
