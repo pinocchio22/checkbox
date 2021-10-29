@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
@@ -45,6 +47,27 @@ class tagInsertDialog (v : View, vm : PhotoViewModel, index : Int, tag_name : Ap
         val editlist = arrayListOf<TextView>(view.tag1_edit, view.tag2_edit, view.tag3_edit, view.tag4_edit, view.tag5_edit)
         tag_addRemove(view, editlist)
         insert_saveCancel(view, dlg, editlist)
+    }
+
+    private fun tag_addRemove(view : View, editlist : ArrayList<TextView>) {
+        val addlist = arrayListOf<ImageView>(view.tag1_add, view.tag2_add, view.tag3_add, view.tag4_add, view.tag5_add)
+        val taglist = arrayListOf<TableRow>(view.tag2, view.tag3, view.tag4, view.tag5)
+        val removelist = arrayListOf<ImageView>(view.tag2_remove, view.tag3_remove, view.tag4_remove ,view.tag5_remove)
+        for (i in 0..3) {
+            addlist[i].setOnClickListener {
+                addlist[i].visibility = View.INVISIBLE  // View.GONE은 해당뷰의 공간 까지 삭제, View.INVISIBLE은 공간은 그대로 유지
+                taglist[i].visibility = View.VISIBLE
+                if (i != 0)
+                    removelist[i-1].visibility = View.INVISIBLE
+            }
+            removelist[i].setOnClickListener {
+                addlist[i].visibility = View.VISIBLE
+                taglist[i].visibility = View.GONE
+                editlist[i+1].setText("")
+                if (i != 0)
+                    removelist[i-1].visibility = View.VISIBLE
+            }
+        }
     }
 
 
