@@ -105,8 +105,25 @@ class tagInsertDialog (v : View, vm : PhotoViewModel, index : Int, tag_name : Ap
         view.tag_cancel.setOnClickListener { dlg.cancel() }
     }
 
-
-
+    fun tagsInit(view : View, tags : List<String>) {
+        if (tags.size >= 1) { view.tag1_edit.setText(tags.elementAt(0)) }
+        if (tags.size >= 2) {
+            view.tag1_add.performClick()
+            view.tag2_edit.setText( tags. elementAt(1))
+        }
+        if (tags.size >= 3) {
+            view.tag1_add.performClick()
+            view.tag2_edit.setText( tags. elementAt(2))
+        }
+        if (tags.size >= 4) {
+            view.tag1_add.performClick()
+            view.tag2_edit.setText( tags. elementAt(3))
+        }
+        if (tags.size >= 5) {
+            view.tag1_add.performClick()
+            view.tag2_edit.setText( tags. elementAt(4))
+        }
+    }
 }
 
 
