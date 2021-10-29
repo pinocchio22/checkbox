@@ -1,7 +1,6 @@
 package com.example.checkbox
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,7 +14,7 @@ import android.view.LayoutInflater as LayoutInflater1
  * @created 2021-10-29
  * @desc
  */
-class PagerRecyclerAdapter (parivate val context : Context, var list : ArrayList<thumbnailData>, var tb : View, var bt : View) : PagerAdapter() {
+class PagerRecyclerAdapter (private val context : Context, var list : ArrayList<thumbnailData>, var tb : View, var bt : View) : PagerAdapter() {
     private var layoutInflater : LayoutInflater1? = null
     private var check : Boolean = false
 
@@ -33,7 +32,7 @@ class PagerRecyclerAdapter (parivate val context : Context, var list : ArrayList
         val image = v.findViewById<View>(R.id.imgView) as ImageView
         val vp = container as ViewPager
         vp.addView(v, 0)
-        ImageLoder.execute(ImageLode(context, image, list[position].photo_id, 0))
+        ImageLoder.execute(ImageLoad(context, image, list[position].photo_id, 0))
         image.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
                 if (check == false) {
