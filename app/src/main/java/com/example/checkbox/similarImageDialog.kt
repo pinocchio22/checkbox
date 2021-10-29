@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.checkbox.MainPhotoView.Companion.list
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
@@ -28,6 +29,7 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
     private val index = index
     private var checkboxSet : HashSet<Long> = hashSetOf()
     private lateinit var recyclerAdapter : RecyclerAdapterDialog
+    private val date = date
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -52,6 +54,12 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
         val dlg = maindlgBuilder.create()
         saveSimilarPhoto(dlg)
         return dlg
+    }
+
+    private fun stringToCalendar() {
+        val formatter = SimpleDateFormat("yyyy년 MM월 dd일 (E) / HH:mm:ss", Locale.getDefault())
+        val tempDate = formatter.parse(date)
+        calendar.setTime(tempDate)
     }
 
 
