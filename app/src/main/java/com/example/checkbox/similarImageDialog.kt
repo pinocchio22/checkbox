@@ -9,11 +9,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.checkbox.MainPhotoView.Companion.list
 import com.example.checkbox.Main_Map.Companion.latLngList
 import com.example.checkbox.Main_Map.Companion.removelist
 import kotlinx.android.synthetic.main.similar_image_layout.view.*
+import kotlinx.android.synthetic.main.similar_image_select.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -113,6 +115,26 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
     override fun onResume() {
         super.onResume()
         setPhotoSize(2, 2)
+    }
+
+    private fun setView(list : ArrayList<thumbnailData>) {
+        recyclerAdapter = RecyclerAdapterDialo(activity, list) {thumbnailData ->
+            val similarImageSelectView : View = layoutInflater.inflate(R.layout.similar_image_select, null)
+            ImageLoder.execute(ImageLoad(context!!, similarImageSelectView.select_photo, thumbnailData.photo_id, 0))
+            val dlgBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(   // 확인 다이얼로그
+                context!!)
+
+            dlgBuilder.setView(similarImageSelectView)
+            val dlgselect = dlgBuilder.create()
+
+            dlgselect.show()
+            similarImageSelectView.select_cancel.setOnClickListener {
+                dlgselect.cancel()
+            }
+        }
+        recyclerView.adapter = recyclerAdapter
+        val lm = GridLayoutManager(context, 2)
+        recyclerView.layoutManager = lm
     }
 
 
