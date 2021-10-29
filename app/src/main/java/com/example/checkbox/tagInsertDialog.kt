@@ -4,9 +4,11 @@ import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.tag_diaglog.view.*
 
 /**
  * @author CHOI
@@ -37,6 +39,12 @@ class tagInsertDialog (v : View, vm : PhotoViewModel, index : Int, tag_name : Ap
         val dlg = dlgBuilder.create()
         insert_tag_click(v, dlg)
         return dlg
+    }
+
+    private fun insert_tag_click(view : View, dlg : androidx.appcompat.app.AlertDialog) {
+        val editlist = arrayListOf<TextView>(view.tag1_edit, view.tag2_edit, view.tag3_edit, view.tag4_edit, view.tag5_edit)
+        tag_addRemove(view, editlist)
+        insert_saveCancel(view, dlg, editlist)
     }
 
 
