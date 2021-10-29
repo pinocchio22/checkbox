@@ -50,7 +50,11 @@ class PagerRecyclerAdapter (parivate val context : Context, var list : ArrayList
         return v
     }
 
-
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        val vp = container as ViewPager
+        val v = `object` as View
+        vp.removeView(v)
+    }
 }
 
 
