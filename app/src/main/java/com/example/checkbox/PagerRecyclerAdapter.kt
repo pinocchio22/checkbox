@@ -16,5 +16,8 @@ class PagerRecyclerAdapter (parivate val context : Context, var list : ArrayList
         return view === `object`    // '===' 는참조 타입의 주소 값을 비교
     }
 
+    override fun getCount(): Int {
+        return list.size
+    }
 
 }
