@@ -7,10 +7,16 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.tag_diaglog.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author CHOI
@@ -68,6 +74,35 @@ class tagInsertDialog (v : View, vm : PhotoViewModel, index : Int, tag_name : Ap
                     removelist[i-1].visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun insert_saveCancel(view : View, dlg : AlertDialog, editlist: ArrayList<TextView>) {
+        view.tag_save.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+                    vm.DeleteTag(MainPhotoView.list[index].photo_id)
+                }
+                var tags : String = ""
+                for (i in 0..4) {
+                    if (editlist[i].text.toString().trim() != "") {
+                        DBThread.execute {
+                            vm.Insert(TagData(MainPhotoView.list[index].photo_id, editlist[i].text.toString()))
+                        }
+                        tags += editlist[i].text.toString() + ","
+                    }
+                }
+                if (tags.length == 0)
+                    MainHandler.post { tag_name.text = "태그 정보 없음" }
+                else {
+                    tags = tags.substring(0, tags.length -2)
+                    MainHandler.post { tag_name.text = tags }
+                }
+
+                Toast.makeText(context!!, "입력 완료 되었습니다.", Toast.LENGTH_SHORT).show()
+                dlg.cancel()
+            }
+        }
+        view.tag_cancel.setOnClickListener { dlg.cancel() }
     }
 
 
