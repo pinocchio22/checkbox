@@ -105,7 +105,7 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
                     dialog.cancel()
                 })
                 val dlgWarning = warninBuilder.create()
-                dlgWarning.cancel()
+                dlgWarning.show()
             }
         }
     }
