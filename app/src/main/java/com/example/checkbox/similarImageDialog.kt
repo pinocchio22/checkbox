@@ -110,6 +110,11 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setPhotoSize(2, 2)
+    }
+
 
 
 }
