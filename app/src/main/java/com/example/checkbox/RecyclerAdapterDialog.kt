@@ -71,6 +71,53 @@ class RecyclerAdapterDialog (val context : Activity?, var list : ArrayList<thumb
         notifyDataSetChanged()
     }
 
+    fun setThumbnailList(list : ArrayList<thumbnailData>?) : HashSet<Long> {
+        if (list.isNullOrEmpty()) this.list = arrayListOf()
+        else {
+            var thisIndex = 0
+            for (pData in list) {
+                do {
+                    val pre = if (thisIndex < this.list.size) {
+                        pData.data.compareTo(this.list[thisIndex].data)
+                    } else {
+                        Int.MIN_VALUE
+                    }
+                    // pre > 0 : 이전 데이터가 사라진 경우
+                    if (pre > 0) {
+                        this.list.removeAt(thisIndex)
+                        MainHandler.post { notifyItemRemoved(thisIndex) }
+                        // 제자리에 머물러야 함
+                        continue
+                    }
+                    // 그대로일 경우
+                    else if (pre == 0) {
+                        if(this.list[thisIndex].photo_id != pData.photo_id) {
+                            this.list[thisIndex].photo_id = pData.photo_id
+                            MainHandler.post { notifyItemChanged(thisIndex) }
+                        }
+                        ++thisIndex
+                        break
+                    }
+                    // 삽입
+                    else {
+                        this.list.add(thisIndex, pData)
+                        MainHandler.post { notifyItemInserted(thisIndex) }
+                        ++thisIndex
+                        break
+                    }
+                } while (true)
+            }
+        }
+        return checkboxSet
+    }
+
 
 
 }
+
+
+
+
+
+
+
