@@ -8,19 +8,19 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/thumbnail_similarimg"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/thumbnail"
         android:scaleType="centerCrop"
-        android:background="@color/bar"/>
+        android:background="@color/bar" />
+
     <CheckBox
+        android:id="@+id/checkbox_similarimg"
+        android:layout_margin="3dp"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="3dp"
-        android:id="@+id/checkbox"
         android:button="@android:color/transparent"
         android:background="@drawable/checkbox"
-        android:checked="false"
-        android:visibility="gone"/>
+        android:checked="false"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout >
