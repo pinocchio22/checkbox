@@ -65,6 +65,12 @@ class RecyclerAdapterDialog (val context : Activity?, var list : ArrayList<thumb
         holder.bind(list[position], position)
     }
 
+    fun setPhotoSize(size : Int, padding_size : Int) {
+        this.size = size
+        this.padding_size = padding_size
+        notifyDataSetChanged()
+    }
+
 
 
 }
