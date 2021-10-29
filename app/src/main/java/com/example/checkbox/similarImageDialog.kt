@@ -28,7 +28,7 @@ import kotlin.collections.HashSet
  * @created 2021-10-29
  * @desc
  */
-class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date : String, index : Int) : DialogFragment {
+class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date : String, index : Int) : DialogFragment() {
 
     private lateinit var recyclerView : RecyclerView
     private val v = v
@@ -119,7 +119,7 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
     }
 
     private fun setView(list : ArrayList<thumbnailData>) {
-        recyclerAdapter = RecyclerAdapterDialo(activity, list) {thumbnailData ->
+        recyclerAdapter = RecyclerAdapterDialog(activity, list) {thumbnailData ->
             val similarImageSelectView : View = layoutInflater.inflate(R.layout.similar_image_select, null)
             ImageLoder.execute(ImageLoad(context!!, similarImageSelectView.select_photo, thumbnailData.photo_id, 0))
             val dlgBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(   // 확인 다이얼로그
