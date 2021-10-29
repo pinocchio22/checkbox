@@ -27,6 +27,16 @@ class tagInsertDialog (v : View, vm : PhotoViewModel, index : Int, tag_name : Ap
             val tags = vm.getTagList(MainPhotoView.list[index].photo_id)
             MainHandler.post { tagsInit(v, tags) }
         }
+
+        val dlgBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(context!!)
+        dlgBuilder.setTitle("태그 삽입")
+        dlgBuilder.setMessage("삽입할 사진의 특징을 입력해주세요. \n태그를 수정하거나 삭제할 수도 있습니다.")
+        dlgBuilder.setIcon(R.drawable.ic_tag)
+        dlgBuilder.setCancelable(false)
+        dlgBuilder.setView(v)
+        val dlg = dlgBuilder.create()
+        insert_tag_click(v, dlg)
+        return dlg
     }
 
 
