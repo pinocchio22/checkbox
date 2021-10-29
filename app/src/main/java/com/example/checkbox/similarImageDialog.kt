@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
@@ -137,8 +138,17 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
         recyclerView.layoutManager = lm
     }
 
-
-
+    private fun setPhotoSize(row : Int, padding : Int) {
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+            override fun onGlobalLayout() {
+                val width = recyclerView.width
+                val size = width / row - 2 * padding
+                recyclerAdapter.setPhotoSize(size, padding)
+                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
 }
 
 
