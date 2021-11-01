@@ -22,7 +22,7 @@ class RecyclerAdapterDialog (val context : Activity?, var list : ArrayList<thumb
     private var checktempList = arrayListOf<Boolean>()
 
     inner class Holder(itemView : View?) : RecyclerView.ViewHolder(itemView!!) {
-        var thumbnail : ImageView = itemView!!.findViewById<ImageView>(R.id.thumbnail_similarimg)
+        var thumbnail : ImageView = itemView!!.findViewById(R.id.thumbnail_similarimg)
         var checkbox : CheckBox = itemView!!.findViewById(R.id.checkbox_similarimg)
 
         fun bind(data : thumbnailData, position : Int) {

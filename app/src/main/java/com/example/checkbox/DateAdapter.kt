@@ -57,21 +57,21 @@ class DateAdapter(context : FragmentActivity, size : Pair<Int, Int>?, days : Arr
         val ckNum = inputCheck
         DBThread.execute {
             val calData = vm.getCalendarData(calendar)
-            val title = calData?.title ?: ""    // calData?.title 이 null 이면 "" = if (calData?.title != null) calData?.title else ""
+            val title = calData?.title ?: ""
             val size = vm.getDateAmount(context, calendar)
-            MainHandler.post {
+            MainHandler.post{
                 if(size != 0) {
                     count.visibility = View.VISIBLE
                 } else
                     count.visibility = View.GONE
 
                 view.setOnClickListener {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime > 1000) {
-                        itemClick(date, 0)  // 1클릭
+                    if(SystemClock.elapsedRealtime() - mLastClickTime > 1000) {
+                        itemClick(date, 0) // 1클릭
                     }
                     mLastClickTime = SystemClock.elapsedRealtime()
                 }
-                view.setOnClickListener {
+                view.setOnLongClickListener {
                     itemClick(date, 1)
                     true
                 }

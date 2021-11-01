@@ -170,7 +170,7 @@ class SearchView : AppCompatActivity() {
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
+            override fun onQueryTextChange(query: String?): Boolean {
                 // mAdapter!!.filter.filter(query)
                 return true
             }

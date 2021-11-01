@@ -43,6 +43,7 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
                 checkboxList.add(num, checkboxData(data.photo_id, false))
 
             thumbnail.setImageResource(0)
+            ImageLoder.execute(ThumbnailLoad(this, thumbnail, data.photo_id))
 
             checkbox.isChecked = checkboxList[num].checked
             checkbox.setOnClickListener {
@@ -54,6 +55,7 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
                 }
             }
             // 이미지를 생성하여 삽입하는 작업 필요함
+            itemView.setOnClickListener { itemClick(data, num) }
         }
     }
 
@@ -70,42 +72,51 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
         holder.bind(list[position], position)
     }
 
-    fun setPhotoSize(size : Int, padiing_size : Int) {
+    fun setPhotoSize(size : Int, padding_size : Int) {
         this.size = size
         this.padding_size = padding_size
         notifyDataSetChanged()
     }
 
     fun setThumbnailList(list : ArrayList<thumbnailData>?) {
-        if (list.isNullOrEmpty()) this.list = arrayListOf()
+        if(list.isNullOrEmpty()) this.list = arrayListOf()
         else {
             var thisIndex = 0
             for(pData in list) {
                 do {
-                    val pre = if (thisIndex < this.list.size) {
+                    val pre = if(thisIndex < this.list.size) {
                         pData.data.compareTo(this.list[thisIndex].data)
                     }
                     else { Int.MIN_VALUE }
-                    // pre > 0 : 이전 데이터가 사라진 경우
-                    if (pre > 0) {
-                        if (this.list[thisIndex].photo_id != pData.photo_id) {
+
+                    //pre > 0 : 이전 데이터가 사라진 경우
+                    if(pre > 0) {
+                        this.list.removeAt(thisIndex)
+                        checkboxList.removeAt(thisIndex)
+                        MainHandler.post { notifyItemRemoved(thisIndex) }
+                        //제자리에 머물러야함
+                        continue
+                    }
+                    //그대로 일 경우
+                    else if(pre == 0) {
+                        if(this.list[thisIndex].photo_id != pData.photo_id) {
                             this.list[thisIndex].photo_id = pData.photo_id
                             checkboxList[thisIndex].id = pData.photo_id
-                            MainHandler.post { notifyItemChanged(thisIndex) }
+                            MainHandler.post{ notifyItemChanged(thisIndex) }
                         }
                         ++thisIndex
                         break
                     }
-                    // 삽입
+                    //삽입
                     else {
                         this.list.add(thisIndex, pData)
 
                         checkboxList.add(thisIndex, checkboxData(pData.photo_id, false))
-                        MainHandler.post { notifyItemInserted(thisIndex) }
+                        MainHandler.post{ notifyItemInserted(thisIndex) }
                         ++thisIndex
                         break
                     }
-                } while (true)
+                } while(true)
             }
         }
     }
