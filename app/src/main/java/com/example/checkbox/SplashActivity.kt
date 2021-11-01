@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -166,13 +167,13 @@ class SplashActivity : AppCompatActivity() {
                         .create()
                         .show()
             } else {
-                ActivityCompat.requestPermissions(this, arrayOf<String>(Manifest.permission.ACCESS_MEDIA_LOCATION),
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_MEDIA_LOCATION),
                         MY_PERMISSION_LOCATION)
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
         when (requestCode) {
             MY_PERMISSION_STORAGE -> for (i in grantResults.indices) {
                 // grantResults[] : 허용된 권한은 0, 거부한 권한은 -1
