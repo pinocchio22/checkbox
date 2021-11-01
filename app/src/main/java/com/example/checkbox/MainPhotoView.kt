@@ -75,8 +75,7 @@ class MainPhotoView : AppCompatActivity() {
 
     fun deletePhotoDlg() {
         val warningBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(
-            this, // 경고 다이얼로그
-        android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
+            this // 경고 다이얼로그
         )
         warningBuilder.setTitle("알림")   //제목
         warningBuilder.setMessage("체크된 사진들을 모두 삭제합니다. \n정말 삭제하시겠습니까?")  //메세지
@@ -97,9 +96,9 @@ class MainPhotoView : AppCompatActivity() {
                         i++
                 }
                 if (j == 1)
-                    Toast.makeText(this, "사진이 삭제 완료 되었습니다.", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "사진이 삭제 완료 되었습니다.", Toast.LENGTH_SHORT).show()
                 else
-                    Toast.makeText(this, "삭제할 사진을 체크해주세요", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "삭제할 사진을 체크해주세요", Toast.LENGTH_SHORT).show()
             }
         )
         warningBuilder.setNegativeButton(
@@ -135,12 +134,20 @@ class MainPhotoView : AppCompatActivity() {
 
     private fun btck2() {
         if(radiobtck == true) {
-            recyclerAdapter.setCheckAll(false)
+            DBThread.execute {
+                MainHandler.post {
+                    recyclerAdapter.setCheckAll(false)
+                }
+            }
             radiobt.isChecked = false
             radiobtck = false
         }
         else {
-            recyclerAdapter.setCheckAll(true)
+            DBThread.execute {
+                MainHandler.post {
+                    recyclerAdapter.setCheckAll(true)
+                }
+            }
             radiobtck = true
         }
     }
@@ -148,7 +155,7 @@ class MainPhotoView : AppCompatActivity() {
     private fun setView(lst : ArrayList<thumbnailData>) {
         recyclerAdapter = RecyclerAdapterPhoto(this, lst) {
             thumbnailData, num -> if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
-                val intent = Intent(this, PhotoViewModel::class.java)
+                val intent = Intent(this, PhotoViewPager::class.java)
             intent.putExtra("index", num)
             startActivityForResult(intent, 100)
             }
@@ -365,15 +372,4 @@ class MainPhotoView : AppCompatActivity() {
         recyclerAdapter.setThumbnailList(list)
         MainPhotoView.list = list
     }
-
-
-
-
-
-
-    
-
-
-
-
 }

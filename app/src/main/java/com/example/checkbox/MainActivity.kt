@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
 
+        DBThread.execute {
+            CheckChangeData()
+        }
+
         observer = ChangeObserver(Handler(), this)
         this.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer)
 
@@ -77,7 +81,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         val go_carmera = findViewById<ImageView>(R.id.main_camera_button)
         go_carmera.setOnClickListener {
-//            captureCamera()
+            captureCamera()
             Toast.makeText(this, "카메라 캡쳐", Toast.LENGTH_SHORT).show()
         }
     }
@@ -103,6 +107,110 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.favorite -> {
+                val intent = Intent(this, MainPhotoView::class.java)
+                intent.putExtra("favorite", "favorite")
+                startActivityForResult(intent, 300)
+            }
+            R.id.location_type -> {
+                val selectitem = arrayOf<String>("맵으로 보기", "목록으로 보기")
+                var select = location_type
+                val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                dlg.setTitle("위치별 사진 설정")
+                dlg.setSingleChoiceItems(selectitem, location_type) { dialog, i ->
+                    when(i) {
+                        0 -> select = 0
+                        1 -> select = 1
+                    }
+                }
+                dlg.setIcon(R.drawable.ic_tag)
+                dlg.setPositiveButton("확인") { _, _ ->
+                    Toast.makeText(this, "완료 되었습니다.", Toast.LENGTH_SHORT).show()
+                    if(location_type != select) {
+                        location_type = select
+                    }
+                }
+                dlg.setNegativeButton("취소") { _, _ -> }
+                dlg.show()
+            }
+            R.id.folder_type -> {
+                val selectitem = arrayOf<String>("2개씩 보기", "3개씩 보기", "4개씩 보기")
+                var select = folder_type
+                val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                dlg.setTitle("폴더 목록 설정")
+                dlg.setSingleChoiceItems(selectitem, folder_type - 2) { dialog, i ->
+                    when(i) {
+                        0 -> select = 2
+                        1 -> select = 3
+                        2 -> select = 4
+                    }
+                }
+                dlg.setIcon(R.drawable.ic_folder)
+                dlg.setPositiveButton("확인") { _, _ ->
+                    Toast.makeText(this, "완료 되었습니다.", Toast.LENGTH_SHORT).show()
+                    if(folder_type != select) {
+                        folder_type = select
+                        for(fragment: Fragment in supportFragmentManager.fragments) {
+                            if (fragment.isVisible) {
+                                val tag = fragment.tag
+                                lateinit var frag: Fragment
+                                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                                supportFragmentManager.popBackStackImmediate(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                                when(tag) {
+                                    "name" -> {
+                                        frag = NameFragment(appbar)
+                                    }
+                                    "tag" -> {
+                                        frag = TagFragment(appbar)
+                                    }
+                                    "location" -> {
+                                        frag = LocationFragment(appbar)
+                                    }
+                                }
+                                transaction.replace(R.id.frame_layout, frag, tag)
+                                transaction.addToBackStack(tag)
+                                transaction.commit()
+                                transaction.isAddToBackStackAllowed
+                                break
+                            }
+                        }
+
+                    }
+                }
+                dlg.setNegativeButton("취소") { _, _ -> }
+                dlg.show()
+            }
+            R.id.photo_type -> {
+                val selectitem = arrayOf<String>("2개씩 보기", "3개씩 보기", "4개씩 보기", "5개씩 보기", "6개씩 보기")
+                var select = photo_type
+                val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+                dlg.setTitle("사진 목록 설정")
+                dlg.setSingleChoiceItems(selectitem, photo_type - 2) { dialog, i ->
+                    when(i) {
+                        0 -> select = 2
+                        1 -> select = 3
+                        2 -> select = 4
+                        3 -> select = 5
+                        4 -> select = 6
+                    }
+                }
+                dlg.setIcon(R.drawable.ic_image)
+                dlg.setPositiveButton("확인") { _, _ ->
+                    Toast.makeText(this, "완료 되었습니다.", Toast.LENGTH_SHORT).show()
+                    if (photo_type != select) {
+                        photo_type = select
+                    }
+                }
+                dlg.setNegativeButton("취소") { _, _ -> }
+                dlg.show()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
