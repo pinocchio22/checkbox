@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.dialog
 
 import android.app.Dialog
 import android.os.Build
@@ -12,6 +12,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.DialogFragment
+import com.example.checkbox.Activity.MainPhotoView
+import com.example.checkbox.DBThread
+import com.example.checkbox.MainHandler
+import com.example.checkbox.R
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.TagData
 import kotlinx.android.synthetic.main.tag_diaglog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,14 +20,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.example.checkbox.MainPhotoView.Companion.list
-import com.example.checkbox.Main_Map.Companion.latLngList
-import com.example.checkbox.Main_Map.Companion.removelist
+import com.example.checkbox.*
+import com.example.checkbox.Activity.MainPhotoView.Companion.list
+import com.example.checkbox.Activity.Main_Map.Companion.latLngList
+import com.example.checkbox.Activity.Main_Map.Companion.removelist
+import com.example.checkbox.Adapter.PagerRecyclerAdapter
+import com.example.checkbox.db.MediaStore_Dao
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.dialog.similarImageDialog
+import com.example.checkbox.dialog.tagInsertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.photoview_frame.*
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
-import java.util.zip.Inflater
 
 /**
  * @author CHOI
@@ -46,7 +50,7 @@ class PhotoViewPager : AppCompatActivity(), BottomNavigationView.OnNavigationIte
     private lateinit var location_name : AppCompatTextView
     private lateinit var Inflater : LayoutInflater
     private lateinit var viewPager : ViewPager
-    private var recyclerAdapter : PagerRecyclerAdapter ?= null
+    private var recyclerAdapter : PagerRecyclerAdapter?= null
 
     private var index = 0
     private var delete_check: Int = 0

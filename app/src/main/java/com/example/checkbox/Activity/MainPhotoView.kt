@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Activity
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -17,10 +17,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checkbox.MainActivity.Companion.photo_type
-import com.github.chrisbanes.photoview.PhotoView
+import com.example.checkbox.*
+import com.example.checkbox.Activity.MainActivity.Companion.photo_type
+import com.example.checkbox.Adapter.RecyclerAdapterPhoto
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.checkboxData
+import com.example.checkbox.db.thumbnailData
 import kotlinx.android.synthetic.main.main_photoview.*
-import kotlinx.android.synthetic.main.schedule_insert.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -370,6 +373,6 @@ class MainPhotoView : AppCompatActivity() {
     private fun getOpenDirByIdList(vm : PhotoViewModel, idList : List<Long>) {
         val list = vm.getThumbnailListByIdList(this, idList)
         recyclerAdapter.setThumbnailList(list)
-        MainPhotoView.list = list
+        Companion.list = list
     }
 }

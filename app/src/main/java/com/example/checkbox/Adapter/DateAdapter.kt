@@ -1,7 +1,6 @@
-package com.example.checkbox
+package com.example.checkbox.Adapter
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.github.chrisbanes.photoview.PhotoView
+import com.example.checkbox.DBThread
+import com.example.checkbox.MainHandler
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.R
 import java.util.*
 import kotlin.collections.ArrayList
 

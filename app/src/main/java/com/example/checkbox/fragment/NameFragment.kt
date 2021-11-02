@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.fragment
 
 import android.content.Intent
 import android.os.Build
@@ -15,7 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checkbox.MainActivity.Companion.folder_type
+import com.example.checkbox.Activity.MainActivity
+import com.example.checkbox.Activity.MainActivity.Companion.folder_type
+import com.example.checkbox.Activity.MainPhotoView
+import com.example.checkbox.Adapter.RecyclerAdapterFolder
+import com.example.checkbox.DataBaseObserver
+import com.example.checkbox.DirectoryThread
+import com.example.checkbox.MainHandler
+import com.example.checkbox.R
+import com.example.checkbox.db.PhotoViewModel
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.main_activity.view.*
 

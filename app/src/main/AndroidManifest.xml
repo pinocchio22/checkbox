@@ -41,9 +41,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity.MainActivity">
         </activity>
-        <activity android:name=".SplashActivity"
+        <activity android:name=".Activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -52,14 +52,14 @@
 
             </intent-filter>
         </activity>
-        <activity android:name=".MainPhotoView">
+        <activity android:name=".Activity.MainPhotoView">
         </activity>
         <activity
-            android:name=".PhotoViewPager"
+            android:name=".Activity.PhotoViewPager"
             android:theme="@style/PhotoTheme">
         </activity>
-        <activity android:name=".Main_Map"/>
-        <activity android:name=".SearchView">
+        <activity android:name=".Activity.Main_Map"/>
+        <activity android:name=".Activity.SearchView">
         </activity>
 
         <meta-data

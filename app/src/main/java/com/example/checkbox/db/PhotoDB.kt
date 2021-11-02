@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.db
 
 import android.content.Context
 import androidx.room.*

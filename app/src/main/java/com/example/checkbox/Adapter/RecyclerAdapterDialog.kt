@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Adapter
 
 import android.app.Activity
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checkbox.*
+import com.example.checkbox.db.thumbnailData
 
 /**
  * @author CHOI

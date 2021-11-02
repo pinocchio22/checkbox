@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Activity
 
 import android.R
 import android.Manifest

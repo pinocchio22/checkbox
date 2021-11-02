@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.fragment
 
 import android.content.Intent
 import android.os.Build
@@ -15,8 +15,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checkbox.MainActivity.Companion.folder_type
-import com.example.checkbox.MainActivity.Companion.location_type
+import com.example.checkbox.Activity.MainActivity
+import com.example.checkbox.Activity.MainActivity.Companion.folder_type
+import com.example.checkbox.Activity.MainPhotoView
+import com.example.checkbox.Adapter.RecyclerAdapterFolder
+import com.example.checkbox.R
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.thumbnailData
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.main_activity.view.*
 
@@ -26,10 +31,10 @@ import kotlinx.android.synthetic.main.main_activity.view.*
  * @created 2021-10-26
  * @desc
  */
-class LocationFragment (v : AppBarLayout) : Fragment() {
+class TagFragment (val v : AppBarLayout) : Fragment() {
 
     val ab = v
-    private var thisview : View? = null
+    private lateinit var thisview : View
     private lateinit var liveData : LiveData<List<thumbnailData>>
     private lateinit var recyclerAdapter : RecyclerAdapterFolder
     private var mLastClickTime : Long = 0
@@ -42,7 +47,7 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
         val vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
 
         setView(thisview)
-        liveData = vm.getLocationDir()
+        liveData = vm.getTagDir()
         liveData.observe(this, Observer { list ->
             val arrayList = ArrayList(list)
             recyclerAdapter.setThumbnailList(arrayList)
@@ -56,25 +61,14 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
         setPhotoSize(this.view!!, folder_type, 10)
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
     private fun setView(view : View?) {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.fragment_RecycleView)
-        recyclerAdapter = RecyclerAdapterFolder(activity, ArrayList(), 3)
+        recyclerAdapter = RecyclerAdapterFolder(activity, ArrayList(), 1)
         {thumbnailData ->
             if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
-                if(location_type == 1) {
-                    val intent = Intent(activity, MainPhotoView::class.java)
-                    intent.putExtra("location_name", thumbnailData.data)
-                    startActivityForResult(intent, 201)
-                }
-                else {
-                    val intent = Intent(activity, Main_Map::class.java)
-                    intent.putExtra("location_name", thumbnailData.data)
-                    startActivityForResult(intent, 800)
-                }
+                val intent = Intent(activity, MainPhotoView::class.java)
+                intent.putExtra("tag_name", thumbnailData.data)
+                startActivityForResult(intent, 203)
             }
             mLastClickTime = SystemClock.elapsedRealtime()
         }
@@ -91,14 +85,15 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
             override fun onGlobalLayout() {
                 val width = recyclerView.width
                 val size = width / row - 2 * padding
-                recyclerAdapter.setPhotoSize(size, padding)
+                recyclerAdapter!!.setPhotoSize(size, padding)
                 recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
     }
-
-
 }
+
+
+
 
 
 

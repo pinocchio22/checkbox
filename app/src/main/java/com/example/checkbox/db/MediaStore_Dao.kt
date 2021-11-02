@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.db
 
 import android.content.ContentUris
 import android.content.Context
@@ -37,8 +37,8 @@ object MediaStore_Dao {
         }
         val sortOrder = MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME + " ASC"
 
-//        val cursor = context.contentResolver.query(uri, projection, selection, null, sortOrder) selection 문제(query에 문제가 있는듯함..)
-        val cursor = context.contentResolver.query(uri, projection, null, null, sortOrder)
+        val cursor = context.contentResolver.query(uri, projection, selection, null, sortOrder) //selection 문제(query에 문제가 있는듯함..)
+//        val cursor = context.contentResolver.query(uri, projection, null, null, sortOrder)
         if(!cursorIsValid(cursor)) return thumbList
 
         do {

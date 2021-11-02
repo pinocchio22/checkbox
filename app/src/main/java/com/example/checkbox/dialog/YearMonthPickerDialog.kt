@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.dialog
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -10,6 +10,8 @@ import android.widget.NumberPicker
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.DialogFragment
+import com.example.checkbox.fragment.DateFragment
+import com.example.checkbox.R
 import kotlinx.android.synthetic.main.search_view.view.*
 import java.util.*
 

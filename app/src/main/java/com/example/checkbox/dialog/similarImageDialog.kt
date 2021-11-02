@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.dialog
 
 import android.app.Activity
 import android.app.Dialog
@@ -9,12 +9,17 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checkbox.MainPhotoView.Companion.list
-import com.example.checkbox.Main_Map.Companion.latLngList
-import com.example.checkbox.Main_Map.Companion.removelist
+import com.example.checkbox.*
+import com.example.checkbox.Activity.MainPhotoView.Companion.list
+import com.example.checkbox.Activity.Main_Map.Companion.latLngList
+import com.example.checkbox.Activity.Main_Map.Companion.removelist
+import com.example.checkbox.Adapter.RecyclerAdapterDialog
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.thumbnailData
 import kotlinx.android.synthetic.main.similar_image_layout.view.*
 import kotlinx.android.synthetic.main.similar_image_select.view.*
 import java.text.SimpleDateFormat
@@ -80,11 +85,11 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
             if (checkboxSet.size == 0) {
                 Toast.makeText(context!!, "체크된 사진이 없습니다.", Toast.LENGTH_SHORT).show()
             } else {
-                val warninBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder ( context!!)    // 경고 다이얼로그
-                warninBuilder.setTitle("알림")    // 제목
-                warninBuilder.setMessage("체크된 사진들을 삭제합니다. \n정말 삭제하시겠습니까?\n\n (체크된 사진 : ${checkboxSet.size} 개")  // 메시지
-                warninBuilder.setCancelable(false)
-                warninBuilder.setPositiveButton("확인", DialogInterface.OnClickListener { dialog, which ->
+                val warningBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder ( context!!)    // 경고 다이얼로그
+                warningBuilder.setTitle("알림")    // 제목
+                warningBuilder.setMessage("체크된 사진들을 삭제합니다. \n정말 삭제하시겠습니까?\n\n (체크된 사진 : ${checkboxSet.size} 개")  // 메시지
+                warningBuilder.setCancelable(false)
+                warningBuilder.setPositiveButton("확인", DialogInterface.OnClickListener { dialog, which ->
                     for (ckbox in checkboxSet) {
                         DeleteThread.execute { vm.Delete(context!!, ckbox) }
                         val index = list.indexOfFirst { it.photo_id == ckbox }
@@ -104,10 +109,10 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
                     pager.finish()
                     Toast.makeText(context!!, "${removenum} 개의 사진이 삭제 완료 되었습니다.", Toast.LENGTH_SHORT).show()
                 })
-                warninBuilder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which ->
+                warningBuilder.setNegativeButton("취소", DialogInterface.OnClickListener { dialog, which ->
                     dialog.cancel()
                 })
-                val dlgWarning = warninBuilder.create()
+                val dlgWarning = warningBuilder.create()
                 dlgWarning.show()
             }
         }
@@ -122,7 +127,7 @@ class similarImageDialog (v : View, vm : PhotoViewModel, location : String, date
         recyclerAdapter = RecyclerAdapterDialog(activity, list) {thumbnailData ->
             val similarImageSelectView : View = layoutInflater.inflate(R.layout.similar_image_select, null)
             ImageLoder.execute(ImageLoad(context!!, similarImageSelectView.select_photo, thumbnailData.photo_id, 0))
-            val dlgBuilder : androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(   // 확인 다이얼로그
+            val dlgBuilder : AlertDialog.Builder = AlertDialog.Builder(   // 확인 다이얼로그
                 context!!)
 
             dlgBuilder.setView(similarImageSelectView)

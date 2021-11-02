@@ -2,7 +2,9 @@ package com.example.checkbox
 
 import android.database.ContentObserver
 import android.os.Handler
-import com.example.checkbox.RecyclerAdapterFolder
+import com.example.checkbox.Activity.MainActivity
+import com.example.checkbox.Adapter.RecyclerAdapterFolder
+import com.example.checkbox.db.MediaStore_Dao
 
 
 class DataBaseObserver(handler: Handler, val adapter : RecyclerAdapterFolder) : ContentObserver(handler) {

@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Activity
 
 import android.app.Activity
 import android.content.Context
@@ -18,9 +18,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.checkbox.MainPhotoView.Companion.list
-import com.example.checkbox.Main_Map.Companion.selectedMarker
-import com.example.checkbox.MarkerClusterRenderer.Companion.createDrawableFromView
+import com.example.checkbox.*
+import com.example.checkbox.Activity.MainPhotoView.Companion.list
+import com.example.checkbox.Activity.Main_Map.Companion.selectedMarker
+import com.example.checkbox.Activity.MarkerClusterRenderer.Companion.createDrawableFromView
+import com.example.checkbox.R
+import com.example.checkbox.db.LatLngData
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.thumbnailData
 import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.*

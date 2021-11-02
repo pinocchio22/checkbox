@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.db
 
 import androidx.room.*
 import com.google.android.gms.maps.model.LatLng

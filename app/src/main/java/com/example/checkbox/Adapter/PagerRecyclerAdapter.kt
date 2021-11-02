@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Adapter
 
 import android.content.Context
 import android.view.View
@@ -6,6 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.example.checkbox.ImageLoad
+import com.example.checkbox.ImageLoder
+import com.example.checkbox.R
+import com.example.checkbox.db.thumbnailData
 import android.view.LayoutInflater as LayoutInflater1
 
 /**

@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Activity
 
 import android.content.Intent
 import android.os.Build
@@ -14,7 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.checkbox.MainActivity.Companion.folder_type
+import com.example.checkbox.*
+import com.example.checkbox.Activity.MainActivity.Companion.folder_type
+import com.example.checkbox.Adapter.RecyclerAdapterFolder
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.thumbnailData
+import com.example.checkbox.dialog.YearMonthPickerDialog
 import kotlinx.android.synthetic.main.main_photoview.*
 import kotlinx.android.synthetic.main.search_view.*
 import java.lang.Exception

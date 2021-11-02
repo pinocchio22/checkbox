@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.db
 
 import android.app.Application
 import android.content.ContentUris

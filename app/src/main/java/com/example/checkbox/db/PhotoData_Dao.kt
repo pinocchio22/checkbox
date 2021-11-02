@@ -1,10 +1,9 @@
-package com.example.checkbox
+package com.example.checkbox.db
 
 import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import java.util.*
 
 @Dao
 interface PhotoData_Dao {

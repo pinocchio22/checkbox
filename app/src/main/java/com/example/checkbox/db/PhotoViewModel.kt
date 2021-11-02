@@ -1,10 +1,11 @@
-package com.example.checkbox
+package com.example.checkbox.db
 
 import android.app.Application
 import android.content.Context
 import android.database.Cursor
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.example.checkbox.DirectoryThread
 import com.google.android.gms.maps.model.LatLng
 import java.text.SimpleDateFormat
 import java.util.*

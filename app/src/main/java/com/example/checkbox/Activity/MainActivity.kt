@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Activity
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -26,6 +26,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
+import com.example.checkbox.*
+import com.example.checkbox.db.MediaStore_Dao
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.fragment.DateFragment
+import com.example.checkbox.fragment.LocationFragment
+import com.example.checkbox.fragment.NameFragment
+import com.example.checkbox.fragment.TagFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.main_activity.*
 import java.io.File

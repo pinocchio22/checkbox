@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -17,12 +17,18 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.example.checkbox.Activity.MainPhotoView
+import com.example.checkbox.Adapter.DateAdapter
+import com.example.checkbox.R
+import com.example.checkbox.SwipeGesture
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.dialog.YearMonthPickerDialog
+import com.example.checkbox.dialog.scheduleDialog
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_cal.*
 import kotlinx.android.synthetic.main.fragment_cal.view.*
 import kotlinx.android.synthetic.main.main_activity.view.*
-import java.time.YearMonth
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,7 +54,7 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
 
     }
 
-    @SuppressLint   //검사에서 제외할 항목을 지정
+    @SuppressLint("RestrictedApi")   //검사에서 제외할 항목을 지정
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,

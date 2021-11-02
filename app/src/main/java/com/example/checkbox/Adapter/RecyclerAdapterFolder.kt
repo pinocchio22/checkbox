@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.Adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checkbox.*
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.thumbnailData
 import java.util.*
 import kotlin.collections.ArrayList
 

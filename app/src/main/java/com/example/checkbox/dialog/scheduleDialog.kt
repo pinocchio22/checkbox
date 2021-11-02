@@ -1,4 +1,4 @@
-package com.example.checkbox
+package com.example.checkbox.dialog
 
 import android.app.Dialog
 import android.database.Cursor
@@ -12,6 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.checkbox.*
+import com.example.checkbox.Adapter.RecyclerAdapterPhoto
+import com.example.checkbox.db.CalendarData
+import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.thumbnailData
 import kotlinx.android.synthetic.main.schedule_insert.view.*
 import kotlinx.android.synthetic.main.similar_image_select.view.*
 import java.text.SimpleDateFormat
