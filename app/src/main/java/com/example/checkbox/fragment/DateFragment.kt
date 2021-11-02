@@ -87,7 +87,7 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
             CalendarCK = true
             Toast.makeText(context!!, "날짜를 선택하여 일정을 등록해보세요.", Toast.LENGTH_SHORT).show()
         }
-        thisview?.scheduleOn?.setOnClickListener {
+        thisview?.scheduleOff?.setOnClickListener {
             thisview?.scheduleOn!!.visibility = View.VISIBLE
             thisview?.scheduleOff!!.visibility = View.GONE
             CalendarCK = false
