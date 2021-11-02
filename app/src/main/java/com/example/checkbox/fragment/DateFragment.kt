@@ -108,13 +108,13 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
         month_left_button.setOnClickListener {
             calDate.add(Calendar.MONTH, -1)
             updateCalendar(view, calDate.clone() as Calendar)
-            setHeader(month_text)
+            setHeaderDate(month_text)
         }
 
         month_right_button.setOnClickListener {
             calDate.add(Calendar.MONTH, 1)
             updateCalendar(view, calDate.clone() as Calendar)
-            setHeader(month_text)
+            setHeaderDate(month_text)
         }
 
         month_text.setOnClickListener(object : View.OnClickListener{
