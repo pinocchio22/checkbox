@@ -373,6 +373,6 @@ class MainPhotoView : AppCompatActivity() {
     private fun getOpenDirByIdList(vm : PhotoViewModel, idList : List<Long>) {
         val list = vm.getThumbnailListByIdList(this, idList)
         recyclerAdapter.setThumbnailList(list)
-        Companion.list = list
+        MainPhotoView.list = list
     }
 }
