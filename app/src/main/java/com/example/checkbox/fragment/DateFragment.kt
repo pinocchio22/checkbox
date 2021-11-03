@@ -49,7 +49,7 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
     private var count = 0
 
     companion object {
-        var CalendarCK : Boolean = false
+        var CalendarCk : Boolean = false
         var calDate : Calendar = Calendar.getInstance()
 
     }
@@ -76,21 +76,21 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
 
         // 상단 스와이프 제스처
         val gestureListener = SwipeGesture(calendar_allheader!!)
-        val gestureDetector = GestureDetector(calendar_allheader!!.context, gestureListener)
+        val gesturedetector = GestureDetector(calendar_allheader!!.context, gestureListener)
         calendar_allheader!!.setOnTouchListener{ v, event ->
-            return@setOnTouchListener gestureDetector.onTouchEvent(event)
+            return@setOnTouchListener gesturedetector.onTouchEvent(event)
         }
 
         thisview?.scheduleOn?.setOnClickListener {
             thisview?.scheduleOff!!.visibility = View.VISIBLE
             thisview?.scheduleOn!!.visibility = View.GONE
-            CalendarCK = true
+            CalendarCk = true
             Toast.makeText(context!!, "날짜를 선택하여 일정을 등록해보세요.", Toast.LENGTH_SHORT).show()
         }
         thisview?.scheduleOff?.setOnClickListener {
             thisview?.scheduleOn!!.visibility = View.VISIBLE
             thisview?.scheduleOff!!.visibility = View.GONE
-            CalendarCK = false
+            CalendarCk = false
             Toast.makeText(context!!, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
         }
         return thisview
@@ -150,7 +150,7 @@ class DateFragment(val v : AppBarLayout) : Fragment() {
             gridView.adapter = DateAdapter(activity!!, size, cells, month) { Date, num ->
                 val cal = Calendar.getInstance()
                 cal.time = Date(Date.time)
-                if (!CalendarCK && num == 0) {
+                if (!CalendarCk && num == 0) {
                     val intent = Intent(activity, MainPhotoView::class.java)
                     intent.putExtra("date_name", cal.time)
                     startActivityForResult(intent, 204)

@@ -27,7 +27,7 @@ class RecyclerAdapterPhoto(val context: Activity?, var list: ArrayList<thumbnail
     private var ck2 = 0
 
     inner class Holder(itemView : View?) : RecyclerView.ViewHolder(itemView!!) {
-        var thumbnail : ImageView = itemView!!.findViewById(R.id.thumbnail)
+        var thumbnail : ImageView = itemView!!.findViewById(R.id.thumbnail_img)
         var checkbox : CheckBox = itemView!!.findViewById(R.id.checkbox)
 
         fun bind(data : thumbnailData, num : Int) {
