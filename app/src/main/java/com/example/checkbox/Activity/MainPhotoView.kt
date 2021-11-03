@@ -237,7 +237,7 @@ class MainPhotoView : AppCompatActivity() {
                 title.text = getname
             }
 
-            intent.hasExtra("data_name") -> {
+            intent.hasExtra("date_name") -> {
                 val cal = intent.getSerializableExtra("date_name") as Date
                 val calendar = Calendar.getInstance()
 
