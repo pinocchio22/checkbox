@@ -34,6 +34,9 @@ import com.example.checkbox.fragment.LocationFragment
 import com.example.checkbox.fragment.NameFragment
 import com.example.checkbox.fragment.TagFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
 import kotlinx.android.synthetic.main.main_activity.*
 import java.io.File
 import java.io.IOException
@@ -46,19 +49,21 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var exitView: View
+    private lateinit var vm : PhotoViewModel
+    private lateinit var observer: ChangeObserver
+    private var init : Boolean = false
+    lateinit var mCurrentPhotoPath: String
     private val REQUEST_TAKE_PHOTO = 200
     private var FINISH_INTERVAL_TIME: Long = 1500
     private var backPressedTime: Long = 0
-    private var init : Boolean = false
-    private lateinit var vm : PhotoViewModel
-    private lateinit var observer: ChangeObserver
-    lateinit var mCurrentPhotoPath: String
+    private lateinit var exitView: View
 
-    companion object{
-        var folder_type = 3
-        var photo_type: Int = 3
+    //private var adLoader: AdLoader? = null
+
+    companion object {
         var location_type: Int = 0
+        var folder_type: Int = 3
+        var photo_type: Int = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,17 +72,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         val bnv = findViewById<View>(R.id.bottomNavigationView) as BottomNavigationView
         bnv.setOnNavigationItemSelectedListener(this)
         exitView = layoutInflater.inflate(R.layout.exit_layout, null)
-
         SetHeader()
         init()
+        //createAd()
 
         vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
 
         DBThread.execute {
+            //vm.Drop(this)
             CheckChangeData()
         }
 
-        observer = ChangeObserver(Handler(), this)
+        observer = ChangeObserver( Handler(), this)
         this.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer)
 
         val go_search = findViewById<ImageView>(R.id.main_search_button)
@@ -86,13 +92,33 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             startActivity(intent)
         }
 
-        val go_carmera = findViewById<ImageView>(R.id.main_camera_button)
-        go_carmera.setOnClickListener {
+        val go_camera = findViewById<ImageView>(R.id.main_camera_button)
+        go_camera.setOnClickListener {
             captureCamera()
-            Toast.makeText(this, "카메라 캡쳐", Toast.LENGTH_SHORT).show()
         }
     }
-
+    //ca-app-pub-3940256099942544/2247696110 테스트
+    //ca-app-pub-1532821601771222/8091357520 찐
+    /*fun createAd() {
+        MobileAds.initialize(this)
+        adLoader = AdLoader.Builder(this, "ca-app-pub-1532821601771222/8091357520")
+            .forUnifiedNativeAd { ad : UnifiedNativeAd ->
+                val template: TemplateView = exitView.findViewById(R.id.tpAdmob)
+                template.setNativeAd(ad)
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(errorCode: Int) {
+                    // Handle the failure by logging, altering the UI, and so on.
+                }
+            })
+            .withNativeAdOptions(
+                NativeAdOptions.Builder()
+                    // Methods in the NativeAdOptions.Builder class can be
+                    // used here to specify individual options settings.
+                    .build())
+            .build()
+        adLoader?.loadAd(AdRequest.Builder().build())
+    }*/
     fun CheckAppFirstExecute():Boolean {
         val pref = getSharedPreferences("IsFirst", Activity.MODE_PRIVATE)
         val isFirst = pref.getBoolean("isFirst", false)
@@ -119,7 +145,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.favorite -> {
-                val intent = Intent(this, MainPhotoView::class.java)
+                val intent = Intent(this, Main_PhotoView::class.java)
                 intent.putExtra("favorite", "favorite")
                 startActivityForResult(intent, 300)
             }
@@ -220,11 +246,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         val fm = supportFragmentManager
         val transaction: FragmentTransaction = fm.beginTransaction()
 
-        when(item.itemId){
+        when(p0.itemId){
             R.id.menu_name -> {
                 fm.popBackStackImmediate("name", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 val fragmentA = NameFragment(appbar)
@@ -276,16 +302,50 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         updateBottomMenu(bnv)
     }
 
+/* 광고
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount == 1 && supportFragmentManager.findFragmentByTag("name")!!.isVisible) {
+            if(!adLoader?.isLoading!!)
+                adLoader?.loadAd(AdRequest.Builder().build())
+            if (!NetworkIsValid(this))
+                exitView.tpAdmob.visibility = View.INVISIBLE
+            else
+                exitView.tpAdmob.visibility = View.VISIBLE
+            val dlgBuilder: androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(    // 확인 다이얼로그
+                this)
+            dlgBuilder.setCancelable(false)
+            dlgBuilder.setView(exitView)
+            dlgBuilder.setTitle("Wimmy를 종료하시겠습니까?")
+            val dlgexit = dlgBuilder.create()
+            dlgexit.show()
+
+            exitView.exit_cancel.setOnClickListener {
+                dlgexit.cancel()
+                val d = exitView.parent as ViewGroup
+                d.removeView(exitView)
+            }
+            exitView.exit_ok.setOnClickListener {
+                finishAffinity()
+                System.runFinalization()
+                System.exit(0)
+            }
+        } else {
+            super.onBackPressed()
+            val bnv = findViewById<View>(R.id.bottomNavigationView) as BottomNavigationView
+            updateBottomMenu(bnv)
+        }
+    }*/
+
     private fun updateBottomMenu(navigation: BottomNavigationView) {
         val tag1: Fragment? = supportFragmentManager.findFragmentByTag("name")
         val tag2: Fragment? = supportFragmentManager.findFragmentByTag("tag")
         val tag3: Fragment? = supportFragmentManager.findFragmentByTag("cal")
         val tag4: Fragment? = supportFragmentManager.findFragmentByTag("location")
 
-        if (tag1 != null && tag1.isVisible) {navigation.menu.findItem(R.id.menu_name).isChecked =true}
-        if (tag2 != null && tag2.isVisible) {navigation.menu.findItem(R.id.menu_tag).isChecked =true}
-        if (tag3 != null && tag3.isVisible) {navigation.menu.findItem(R.id.menu_cal).isChecked =true}
-        if (tag4 != null && tag4.isVisible) {navigation.menu.findItem(R.id.menu_location).isChecked =true}
+        if(tag1 != null && tag1.isVisible) {navigation.menu.findItem(R.id.menu_name).isChecked = true }
+        if(tag2 != null && tag2.isVisible) {navigation.menu.findItem(R.id.menu_tag).isChecked = true }
+        if(tag3 != null && tag3.isVisible) {navigation.menu.findItem(R.id.menu_cal).isChecked = true }
+        if(tag4 != null && tag4.isVisible) {navigation.menu.findItem(R.id.menu_location).isChecked = true }
 
     }
 
@@ -303,7 +363,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         if (CheckAppFirstExecute() == true) {
             val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
             dlg.setTitle("안녕하세요") //제목
-            dlg.setMessage("Check BOx 가 처음이신가요?\n특징, 위치 추출을 위해 데이터를 연결하세요.\n맵의 경우, 초기 값 설정 과정에서 원활하게 동작하지 않을 수 있습니다.") // 메시지
+            dlg.setMessage("Wimmy가 처음이신가요?\n특징, 위치 추출을 위해 데이터를 연결하세요.\n맵의 경우, 초기 값 설정 과정에서 원활하게 동작하지 않을 수 있습니다.") // 메시지
             dlg.setCancelable(false)
             dlg.setPositiveButton("확인", DialogInterface.OnClickListener { dialog, which ->
             })
@@ -314,11 +374,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private fun captureCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null ) {
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
             try {
                 val photoFile = createImageFile()
-                if (photoFile != null) {
+                if (photoFile != null) { // getUriForFile의 두 번째 인자는 Manifest provier의 authorites와 일치해야 함
                     val providerURI = FileProvider.getUriForFile(this, packageName, photoFile)
+                    // 인텐트에 전달할 때는 FileProvier의 Return값인 content://로만!!, providerURI의 값에 카메라 데이터를 넣어 보냄
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI)
                     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
                 }
@@ -329,6 +390,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -337,26 +399,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 if (resultCode == RESULT_OK) {
                     try {
                         galleryAddPic()
-                    }catch (e: Exception) {
+                    } catch (e: Exception) {
                         Log.e("REQUEST_TAKE_PHOTO", e.toString())
                     }
+
                 } else {
-                    Toast.makeText(this@MainActivity, "사진찍기를 취소했습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "사진찍기를 취소하였습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    @Throws(IOException::class) //IOException 클래스에 대해서는 예외처리
-    fun createImageFile(): File? {
-        val timeStamp : String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+    @Throws(IOException::class)
+    fun createImageFile(): File? { // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val imageFileName = "JPEG_$timeStamp.jpg"
         val storageDir = File(
-                Environment.getExternalStorageDirectory().toString() + "/Pictures", "Cbox"
+            Environment.getExternalStorageDirectory().toString() + "/Pictures",
+            "Wimmy"
         )
         if (!storageDir.exists()) {
             Log.i("mCurrentPhotoPath1", storageDir.toString())
-            storageDir.mkdirs() //File.mkdir = 만들고자 하는 디렉토리의 상위 디렉토리가 존재하지 않을 경우, 생성 불가 | File.mkdirs = 만들고자 하는 디렉토리의 상위 디렉토리가 존재하지 않을 경우, 상위 디렉토리까지 생성
+            storageDir.mkdirs()
         }
         val imageFile = File(storageDir, imageFileName)
         mCurrentPhotoPath = imageFile.absolutePath
@@ -365,14 +429,20 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private fun galleryAddPic() {
         Log.i("galleryAddPic", "Call")
-        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE) // 새로 파일을 만드는것이 아닌 해당 경로의 파일을 객체화
+        val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        // 해당 경로에 있는 파일을 객체화(새로 파일을 만든다는 것으로 이해하면 안 됨)
         val f = File(mCurrentPhotoPath)
-        val contentUri : Uri = Uri.fromFile(f)
+        val contentUri: Uri = Uri.fromFile(f)
         mediaScanIntent.data = contentUri
         sendBroadcast(mediaScanIntent)
         Toast.makeText(this, "사진이 앨범에 저장되었습니다.", Toast.LENGTH_SHORT).show()
     }
 
+
+    // 위험 권한, 권한 전용 팝업
+    // 안드로이드 앱 개발시 TargetSDK가 마시멜로 버전(APK 23)이상인 경우, 디바이스의 특정 기능을 사용할 때 권한을 요구하는데
+    // 그 권한 중에 위험 권한으로 분류된 권한은 개발자가 직접 사용자에게 권한 허용을 물을 수 있도록 작성해야한다.
+    // 즉, 코드로 작성해야함.
 
     fun CheckChangeData() {
         ChangeCheckThread = ThreadPoolExecutor(1, 3, 0L, TimeUnit.MILLISECONDS, LinkedBlockingQueue())
@@ -400,7 +470,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 ChangeCheckThread.execute {
                     vm.getFullLocation(this, id)
                     vm.getFavorite(id)
-//                    AddTagsByApi(this, id) // 광고
+                    AddTagsByApi(this, id)
                 }
 
                 lastAddedDate = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED))
@@ -422,7 +492,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    @Suppress("DEPRECATION")    // 'DEPRECATION'에 대한 경고 억제
+    @Suppress("DEPRECATION")
     private fun NetworkIsValid(context: Context) : Boolean {
         var result = false
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -448,5 +518,36 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
         return result
+    }
+
+    private fun AddTagsByApi(context: Context, id: Long) {
+        val options = FirebaseTranslatorOptions.Builder()
+            .setSourceLanguage(FirebaseTranslateLanguage.EN)
+            .setTargetLanguage(FirebaseTranslateLanguage.KO)
+            .build()
+        val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
+
+        val bitmap = MediaStore_Dao.LoadThumbnailById(context, id) ?: return
+        val image = FirebaseVisionImage.fromBitmap(bitmap)
+        val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
+        labeler.processImage(image)
+            .addOnSuccessListener { labels ->
+                translator.downloadModelIfNeeded()
+                    .addOnSuccessListener {
+                        for (label in labels) {
+                            translator.translate(label.text)
+                                .addOnSuccessListener { translatedText ->
+                                    if(label.confidence >= 0.88) {
+                                        DBThread.execute {
+                                            vm.Insert(TagData(id, translatedText))
+                                        }
+                                    }
+                                }
+                                .addOnFailureListener { e -> e.stackTrace }
+                        }
+                    }
+                    .addOnFailureListener { e -> e.stackTrace }
+            }
+            .addOnFailureListener { e -> e.stackTrace }
     }
 }
