@@ -29,11 +29,17 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.checkbox.*
 import com.example.checkbox.db.MediaStore_Dao
 import com.example.checkbox.db.PhotoViewModel
+import com.example.checkbox.db.TagData
 import com.example.checkbox.fragment.DateFragment
 import com.example.checkbox.fragment.LocationFragment
 import com.example.checkbox.fragment.NameFragment
 import com.example.checkbox.fragment.TagFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage
+import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.main_activity.*
 import java.io.File
 import java.io.IOException
@@ -400,7 +406,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 ChangeCheckThread.execute {
                     vm.getFullLocation(this, id)
                     vm.getFavorite(id)
-//                    AddTagsByApi(this, id) // 광고
+                    AddTagsByApi(this, id) // 광고
                 }
 
                 lastAddedDate = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED))
@@ -448,5 +454,36 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
         return result
+    }
+
+    private fun AddTagsByApi(context: Context, id : Long) {
+        val options = FirebaseTranslatorOptions.Builder()
+                .setSourceLanguage(FirebaseTranslateLanguage.EN)
+                .setTargetLanguage(FirebaseTranslateLanguage.KO)
+                .build()
+        val translator = FirebaseNaturalLanguage.getInstance().getTranslator(options)
+
+        val bitmap = MediaStore_Dao.LoadThumbnailById(context, id) ?: return
+        val image = FirebaseVisionImage.fromBitmap(bitmap)
+        val labeler = FirebaseVision.getInstance().onDeviceImageLabeler
+        labeler.processImage(image)
+                .addOnSuccessListener { labels ->
+                    translator.downloadModelIfNeeded()
+                            .addOnSuccessListener {
+                                for (label in labels) {
+                                    translator.translate(label.text)
+                                            .addOnSuccessListener { translatedText ->
+                                                if (label.confidence >= 0.88) {
+                                                    DBThread.execute {
+                                                        vm.Insert(TagData(id, translatedText))
+                                                    }
+                                                }
+                                            }
+                                            .addOnFailureListener { e -> e.stackTrace}
+                                }
+                            }
+                            .addOnFailureListener { e -> e.stackTrace}
+                }
+                .addOnFailureListener { e -> e.stackTrace}
     }
 }
