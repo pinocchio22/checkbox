@@ -33,28 +33,27 @@ import kotlinx.android.synthetic.main.main_activity.view.*
  * @created 2021-10-26
  * @desc
  */
-class LocationFragment (v : AppBarLayout) : Fragment() {
+class LocationFragment (val v : AppBarLayout) : Fragment() {
 
     val ab = v
-    private var thisview : View? = null
+    private lateinit var thisview : View
     private lateinit var liveData : LiveData<List<thumbnailData>>
     private lateinit var recyclerAdapter : RecyclerAdapterFolder
     private var mLastClickTime : Long = 0
-    private lateinit var vm : PhotoViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         ab.main_toolbar.visibility = View.VISIBLE
         ab.setExpanded(true, true)
 
         thisview = inflater.inflate(R.layout.fragment_view, container, false)
-        vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
+        val vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
 
         setView(thisview)
-//        liveData = vm.getLocationDir()
-//        liveData.observe(this, Observer { list ->
-//            val arrayList = ArrayList(list)
-//            recyclerAdapter.setThumbnailList(arrayList)
-//        })
+        liveData = vm.getLocationDir()
+        liveData.observe(this, Observer { list ->
+            val arrayList = ArrayList(list)
+            recyclerAdapter.setThumbnailList(arrayList)
+        })
 
         return thisview
     }
@@ -73,16 +72,19 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
         recyclerAdapter = RecyclerAdapterFolder(activity, ArrayList(), 3)
         {thumbnailData ->
             if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
-                if(location_type == 1) {
-                    val intent = Intent(activity, MainPhotoView::class.java)
-                    intent.putExtra("location_name", thumbnailData.data)
-                    startActivityForResult(intent, 201)
-                }
-                else {
-                    val intent = Intent(activity, Main_Map::class.java)
-                    intent.putExtra("location_name", thumbnailData.data)
-                    startActivityForResult(intent, 800)
-                }
+//                if(location_type == 1) {
+//                    val intent = Intent(activity, MainPhotoView::class.java)
+//                    intent.putExtra("location_name", thumbnailData.data)
+//                    startActivityForResult(intent, 201)
+//                }
+//                else {
+//                    val intent = Intent(activity, Main_Map::class.java)
+//                    intent.putExtra("location_name", thumbnailData.data)
+//                    startActivityForResult(intent, 800)
+//                }
+                val intent = Intent(activity, MainPhotoView::class.java)
+                intent.putExtra("location_name", thumbnailData.data)
+                startActivityForResult(intent, 201)
             }
             mLastClickTime = SystemClock.elapsedRealtime()
         }
@@ -99,7 +101,7 @@ class LocationFragment (v : AppBarLayout) : Fragment() {
             override fun onGlobalLayout() {
                 val width = recyclerView.width
                 val size = width / row - 2 * padding
-                recyclerAdapter.setPhotoSize(size, padding)
+                recyclerAdapter!!.setPhotoSize(size, padding)
                 recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
