@@ -32,10 +32,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="false" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -51,6 +47,9 @@
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -62,26 +61,23 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Activity.MainActivity">
-        </activity>
+        <activity android:name=".Activity.MainActivity" />
         <activity
             android:name=".Activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainPhotoView">
-        </activity>
+        <activity android:name=".Activity.MainPhotoView" />
         <activity
             android:name=".Activity.PhotoViewPager"
-            android:theme="@style/PhotoTheme">
-        </activity>
+            android:theme="@style/PhotoTheme" />
         <activity android:name=".Activity.Main_Map" />
-        <activity android:name=".Activity.SearchView">
-        </activity>
+        <activity android:name=".Activity.SearchView" />
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
