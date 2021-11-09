@@ -42,7 +42,11 @@ class LocationFragment (val v : AppBarLayout) : Fragment() {
     private lateinit var recyclerAdapter : RecyclerAdapterFolder
     private var mLastClickTime : Long = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
         ab.main_toolbar.visibility = View.VISIBLE
         ab.setExpanded(true, true)
 
@@ -64,9 +68,9 @@ class LocationFragment (val v : AppBarLayout) : Fragment() {
         setPhotoSize(this.view!!, folder_type, 10)
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
+//    override fun onPause() {
+//        super.onPause()
+//    }
 
     private fun setView(view : View?) {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.fragment_RecycleView)

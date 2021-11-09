@@ -287,6 +287,7 @@ class MainPhotoView : AppCompatActivity() {
                 var templist = listOf<Long>()
                 liveData.observe(this, androidx.lifecycle.Observer { idList ->
                     if (idList != templist) {
+                        templist = idList
                         DBThread.execute {
                             getOpenDirByIdList(vm, idList)
                             MainHandler.post {
