@@ -78,7 +78,7 @@ class NameFragment(val v: AppBarLayout) : Fragment() {
             if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
                 val intent = Intent(activity, MainPhotoView::class.java)
                 intent.putExtra("dir_name", thumbnailData.data)
-                startActivityForResult(intent, 202)
+                startActivityForResult(intent, 201)
             }
             mLastClickTime = SystemClock.elapsedRealtime()
         }
