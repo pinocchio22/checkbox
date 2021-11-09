@@ -37,7 +37,7 @@ import kotlinx.android.synthetic.main.main_activity.view.*
 class LocationFragment (val v : AppBarLayout) : Fragment() {
 
     val ab = v
-    private lateinit var thisview : View
+    private var thisview : View? = null
     private lateinit var liveData : LiveData<List<thumbnailData>>
     private lateinit var recyclerAdapter : RecyclerAdapterFolder
     private var mLastClickTime : Long = 0
@@ -103,7 +103,7 @@ class LocationFragment (val v : AppBarLayout) : Fragment() {
             override fun onGlobalLayout() {
                 val width = recyclerView.width
                 val size = width / row - 2 * padding
-                recyclerAdapter!!.setPhotoSize(size, padding)
+                recyclerAdapter.setPhotoSize(size, padding)
                 recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
