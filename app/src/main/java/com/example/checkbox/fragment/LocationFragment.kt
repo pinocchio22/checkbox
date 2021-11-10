@@ -72,16 +72,16 @@ import kotlinx.android.synthetic.main.main_activity.view.*
 //        recyclerAdapter = RecyclerAdapterFolder(activity, ArrayList(), 3)
 //        {thumbnailData ->
 //            if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
-////                if(location_type == 1) {
+//                if(location_type == 1) {
 //                    val intent = Intent(activity, MainPhotoView::class.java)
 //                    intent.putExtra("location_name", thumbnailData.data)
 //                    startActivityForResult(intent, 201)
-////                }
-////                else {
-////                    val intent = Intent(activity, Main_Map::class.java)
-////                    intent.putExtra("location_name", thumbnailData.data)
-////                    startActivityForResult(intent, 800)
-////                }
+//                }
+//                else {
+//                    val intent = Intent(activity, Main_Map::class.java)
+//                    intent.putExtra("location_name", thumbnailData.data)
+//                    startActivityForResult(intent, 800)
+//                }
 //            }
 //            mLastClickTime = SystemClock.elapsedRealtime()
 //        }
@@ -133,6 +133,10 @@ class LocationFragment (val v : AppBarLayout) : Fragment() {
     override fun onResume() {
         super.onResume()
         setPhotoSize(this.view!!, folder_type, 10)
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
     private fun setView(view : View?) {
