@@ -75,18 +75,21 @@ class LocationFragment (val v : AppBarLayout) : Fragment() {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.fragment_RecycleView)
         recyclerAdapter = RecyclerAdapterFolder(activity, ArrayList(), 3)
         {thumbnailData ->
-            if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
-                if(location_type == 1) {
-                    val intent = Intent(activity, MainPhotoView::class.java)
-                    intent.putExtra("location_name", thumbnailData.data)
-                    startActivityForResult(intent, 201)
-                }
-                else {
-                    val intent = Intent(activity, Main_Map::class.java)
-                    intent.putExtra("location_name", thumbnailData.data)
-                    startActivityForResult(intent, 800)
-                }
-            }
+//            if (SystemClock.elapsedRealtime() - mLastClickTime > 300) {
+//                if(location_type == 1) {
+//                    val intent = Intent(activity, MainPhotoView::class.java)
+//                    intent.putExtra("location_name", thumbnailData.data)
+//                    startActivityForResult(intent, 201)
+//                }
+//                else {
+//                    val intent = Intent(activity, Main_Map::class.java)
+//                    intent.putExtra("location_name", thumbnailData.data)
+//                    startActivityForResult(intent, 800)
+//                }
+//            }
+            val intent = Intent(activity, MainPhotoView::class.java)
+            intent.putExtra("location_name", thumbnailData.data)
+            startActivityForResult(intent, 201)
             mLastClickTime = SystemClock.elapsedRealtime()
         }
         recyclerView?.adapter = recyclerAdapter
