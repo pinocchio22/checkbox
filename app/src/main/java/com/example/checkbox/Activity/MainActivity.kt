@@ -9,7 +9,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -18,8 +17,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -43,12 +45,12 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.main_activity.*
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -133,9 +135,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 val selectitem = arrayOf<String>("맵으로 보기", "목록으로 보기")
                 var select = location_type
                 val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
+
                 dlg.setTitle("위치별 사진 설정")
                 dlg.setSingleChoiceItems(selectitem, location_type) { dialog, i ->
-                    when(i) {
+                    when (i) {
                         0 -> select = 0
                         1 -> select = 1
                     }
@@ -143,11 +146,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 dlg.setIcon(R.drawable.ic_tag)
                 dlg.setPositiveButton("확인") { _, _ ->
                     Toast.makeText(this, "완료 되었습니다.", Toast.LENGTH_SHORT).show()
-                    if(location_type != select) {
+                    if (location_type != select) {
                         location_type = select
                     }
                 }
-                dlg.setNegativeButton("취소") { _, _ -> }
+                dlg.setNeutralButton("취소") { _, _ -> }
                 dlg.show()
             }
             R.id.folder_type -> {
@@ -156,7 +159,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
                 dlg.setTitle("폴더 목록 설정")
                 dlg.setSingleChoiceItems(selectitem, folder_type - 2) { dialog, i ->
-                    when(i) {
+                    when (i) {
                         0 -> select = 2
                         1 -> select = 3
                         2 -> select = 4
@@ -165,15 +168,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 dlg.setIcon(R.drawable.ic_folder)
                 dlg.setPositiveButton("확인") { _, _ ->
                     Toast.makeText(this, "완료 되었습니다.", Toast.LENGTH_SHORT).show()
-                    if(folder_type != select) {
+                    if (folder_type != select) {
                         folder_type = select
-                        for(fragment: Fragment in supportFragmentManager.fragments) {
+                        for (fragment: Fragment in supportFragmentManager.fragments) {
                             if (fragment.isVisible) {
                                 val tag = fragment.tag
                                 lateinit var frag: Fragment
                                 val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                                 supportFragmentManager.popBackStackImmediate(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                                when(tag) {
+                                when (tag) {
                                     "name" -> {
                                         frag = NameFragment(appbar)
                                     }
@@ -203,7 +206,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
                 dlg.setTitle("사진 목록 설정")
                 dlg.setSingleChoiceItems(selectitem, photo_type - 2) { dialog, i ->
-                    when(i) {
+                    when (i) {
                         0 -> select = 2
                         1 -> select = 3
                         2 -> select = 4
@@ -234,25 +237,25 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.menu_name -> {
                 fm.popBackStackImmediate("name", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 val fragmentA = NameFragment(appbar)
-                transaction.replace(R.id.frame_layout,fragmentA, "name")
+                transaction.replace(R.id.frame_layout, fragmentA, "name")
                 transaction.addToBackStack("name")
             }
             R.id.menu_tag -> {
                 fm.popBackStackImmediate("tag", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 val fragmentB = TagFragment(appbar)
-                transaction.replace(R.id.frame_layout,fragmentB, "tag")
+                transaction.replace(R.id.frame_layout, fragmentB, "tag")
                 transaction.addToBackStack("tag")
             }
             R.id.menu_cal -> {
                 fm.popBackStackImmediate("cal", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 val fragmentC = DateFragment(appbar)
-                transaction.replace(R.id.frame_layout,fragmentC, "cal")
+                transaction.replace(R.id.frame_layout, fragmentC, "cal")
                 transaction.addToBackStack("cal")
             }
             R.id.menu_location -> {
                 fm.popBackStackImmediate("location", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 val fragmentD = LocationFragment(appbar)
-                transaction.replace(R.id.frame_layout,fragmentD, "location")
+                transaction.replace(R.id.frame_layout, fragmentD, "location")
                 transaction.addToBackStack("location")
             }
         }
@@ -343,7 +346,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 if (resultCode == RESULT_OK) {
                     try {
                         galleryAddPic()
-                    }catch (e: Exception) {
+                    } catch (e: Exception) {
                         Log.e("REQUEST_TAKE_PHOTO", e.toString())
                     }
                 } else {
@@ -456,7 +459,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return result
     }
 
-    private fun AddTagsByApi(context: Context, id : Long) {
+    private fun AddTagsByApi(context: Context, id: Long) {
         val options = FirebaseTranslatorOptions.Builder()
                 .setSourceLanguage(FirebaseTranslateLanguage.EN)
                 .setTargetLanguage(FirebaseTranslateLanguage.KO)
