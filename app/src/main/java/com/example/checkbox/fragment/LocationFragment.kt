@@ -107,11 +107,11 @@ import kotlinx.android.synthetic.main.main_activity.view.*
 
 class LocationFragment (val v : AppBarLayout) : Fragment() {
 
-    val ab = v
-    private lateinit var thisview : View
+    private var thisview : View? = null
     private lateinit var liveData : LiveData<List<thumbnailData>>
     private lateinit var recyclerAdapter : RecyclerAdapterFolder
     private var mLastClickTime : Long = 0
+    val ab = v
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         ab.main_toolbar.visibility = View.VISIBLE
@@ -121,7 +121,7 @@ class LocationFragment (val v : AppBarLayout) : Fragment() {
         val vm = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
 
         setView(thisview)
-        liveData = vm.getTagDir()
+        liveData = vm.getLocationDir() // getLocationDir 문제
         liveData.observe(this, Observer { list ->
             val arrayList = ArrayList(list)
             recyclerAdapter.setThumbnailList(arrayList)
