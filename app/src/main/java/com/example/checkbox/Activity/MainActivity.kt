@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         val go_camera = findViewById<ImageView>(R.id.main_camera_button)
         go_camera.setOnClickListener {
             captureCamera()
-            Toast.makeText(this, "카메라 캡쳐", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "사진 촬영", Toast.LENGTH_SHORT).show()
         }
     }
 
