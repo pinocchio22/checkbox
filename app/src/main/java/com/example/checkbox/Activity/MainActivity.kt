@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                         photo_type = select
                     }
                 }
-                dlg.setNegativeButton("취소") { _, _ -> }
+                dlg.setNeutralButton("취소") { _, _ -> }
                 dlg.show()
             }
         }
