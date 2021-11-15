@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 startActivityForResult(intent, 300)
             }
             R.id.location_type -> {
-                val selectitem = arrayOf<String>("맵으로 보기", "목록으로 보기")
+                val selectitem = arrayOf<String>("지도로 보기", "폴더로 보기")
                 var select = location_type
                 val dlg: AlertDialog.Builder = AlertDialog.Builder(this)
 
